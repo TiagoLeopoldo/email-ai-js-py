@@ -1,0 +1,73 @@
+# backend/nlp/training_data.py
+
+TRAINING_DATA = [
+    # Intenção: status
+    ("Preciso de status da requisição", "status"),
+    ("Qual o andamento do meu pedido?", "status"),
+    ("Quero saber a situação atual", "status"),
+    ("Gostaria de acompanhar o progresso", "status"),
+    ("Me informe o status", "status"),
+    ("Qual é o status do contrato?", "status"),
+    ("Quero verificar o andamento da solicitação", "status"),
+    ("Como está o progresso do processo?", "status"),
+    ("Atualize o status para mim", "status"),
+    ("Qual a situação do pedido?", "status"),
+    ("Pode atualizar o status do pedido?", "status"),
+    ("Status atual da solicitação 456", "status"),
+
+    # Intenção: prazo
+    ("Qual o prazo para entrega?", "prazo"),
+    ("Quando será concluído?", "prazo"),
+    ("Me informe a data prevista", "prazo"),
+    ("Gostaria de saber o prazo da entrega", "prazo"),
+    ("Qual a previsão de conclusão?", "prazo"),
+    ("Quando termina o contrato?", "prazo"),
+    ("Qual a deadline do projeto?", "prazo"),
+    ("Preciso saber a data limite", "prazo"),
+    ("Qual o prazo estimado?", "prazo"),
+    ("Quando estará pronto?", "prazo"),
+    ("Qual a data estimada de entrega do pedido 321?", "prazo"),
+    ("Tem previsão para conclusão até sexta?", "prazo"),
+
+    # Intenção: cancelamento
+    ("Quero cancelar meu pedido", "cancelamento"),
+    ("Desejo encerrar o contrato", "cancelamento"),
+    ("Preciso anular a solicitação", "cancelamento"),
+    ("Gostaria de desistir da requisição", "cancelamento"),
+    ("Solicito o cancelamento imediato", "cancelamento"),
+    ("Quero encerrar minha assinatura", "cancelamento"),
+    ("Preciso cancelar o serviço", "cancelamento"),
+    ("Desejo remover minha inscrição", "cancelamento"),
+    ("Quero anular o pedido feito", "cancelamento"),
+    ("Cancelar a requisição atual", "cancelamento"),
+    ("Cancelar assinatura agora", "cancelamento"),
+    ("Quero remover meu plano atual", "cancelamento"),
+
+    # Intenção: erro
+    ("Estou com erro no sistema", "erro"),
+    ("O formulário travou", "erro"),
+    ("Encontrei uma falha ao enviar", "erro"),
+    ("O site apresentou um bug", "erro"),
+    ("Houve uma inconsistência no processo", "erro"),
+    ("O sistema não funciona corretamente", "erro"),
+    ("Recebi uma mensagem de erro", "erro"),
+    ("A aplicação está com problema", "erro"),
+    ("O programa travou durante o uso", "erro"),
+    ("Ocorreu uma falha inesperada", "erro"),
+    ("Erro 500 ao enviar formulário", "erro"),
+    ("Aplicação retornou falha de autenticação", "erro"),
+
+    # Intenção: humano
+    ("Quero falar com um atendente humano", "humano"),
+    ("Preciso de suporte por telefone", "humano"),
+    ("Me conecte com uma pessoa", "humano"),
+    ("Gostaria de atendimento humano", "humano"),
+    ("Preciso falar com alguém", "humano"),
+    ("Quero falar com um atendente", "humano"),
+    ("Me transfira para suporte humano", "humano"),
+    ("Preciso conversar com uma pessoa", "humano"),
+    ("Quero atendimento por telefone", "humano"),
+    ("Desejo falar com um operador", "humano"),
+    ("Transferir para um atendente humano", "humano"),
+    ("Preciso falar com suporte por voz", "humano"),
+]

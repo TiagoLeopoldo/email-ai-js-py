@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Classifier AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Email Classifier AI</h1>
+    <p>Classifique emails e gere respostas automáticas.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Processar email</h2>
+      <form id="email-form">
+        <label class="label" for="email-text">Cole o texto do email</label>
+        <textarea id="email-text" placeholder="Cole aqui o conteúdo do email..." rows="10" required></textarea>
+
+        <div class="divider">ou</div>
+
+        <label class="label" for="email-file">Faça upload (.txt ou .pdf)</label>
+        <input id="email-file" type="file" accept=".txt,.pdf" />
+
+        <button type="submit" class="btn">Classificar e sugerir resposta</button>
+      </form>
+    </section>
+
+    <section id="results" class="card hidden">
+      <h2>Resultado</h2>
+      <div class="result-row">
+        <span class="result-label">Categoria:</span>
+        <span id="category" class="badge">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Resposta sugerida:</span>
+        <pre id="suggested-reply">—</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Feito para o desafio da AutoU por Tiago de Noronha Leopoldo — v0.1</small>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
