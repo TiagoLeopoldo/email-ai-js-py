@@ -13,7 +13,10 @@ app = FastAPI()
 # Em produção, ajuste o domínio do frontend hospedado
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://email-ai-js-mtdyncoqd-tiagos-projects-6ffe6e70.vercel.app"],     # domínio do frontend em produção
+    allow_origins=[
+        "https://email-ai-js-py.vercel.app",
+        "https://email-ai-js-mtdyncoqd-tiagos-projects-6ffe6e70.vercel.app",
+        "https://email-ai-js-etcvci9b6-tiagos-projects-6ffe6e70.vercel.app"  ],     # domínio do frontend em produção
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
