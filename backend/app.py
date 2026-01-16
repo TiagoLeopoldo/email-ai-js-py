@@ -10,14 +10,10 @@ import os
 app = FastAPI()
 
 # Habilita CORS para permitir chamadas do front-end
-# Em produção, ajuste o domínio do frontend hospedado (ex.: Vercel)
+# Em produção, ajuste o domínio do frontend hospedado
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",          # desenvolvimento local
-        "http://127.0.0.1:3000",          # alternativa local
-        "https://email-ai.vercel.app"     # domínio do frontend em produção
-    ],
+    allow_origins=["https://email-ai-frontend.vercel.app"],     # domínio do frontend em produção
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
