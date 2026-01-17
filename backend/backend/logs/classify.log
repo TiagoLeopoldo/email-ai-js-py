@@ -149,3 +149,21 @@
 2026-01-16 23:24:56,495 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
 2026-01-16 23:36:57,168 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
 2026-01-16 23:36:58,982 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-17 02:09:18,679 | ERROR | Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-01-17 02:09:53,421 | ERROR | Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-01-17 02:12:42,529 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato
+  mobile
+tnleopoldodevgmailcom
+wwwlinkedincomintiago
+noronhaleopoldo  linkedin
+principais competências
+desenvolv
+2026-01-17 02:12:44,561 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
