@@ -13,13 +13,12 @@ load_dotenv()
 
 app = FastAPI()
 
-# Configuração de CORS (mantida conforme solicitado)
+# Configuração de CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://email-ai-js-py.vercel.app",
-        "https://email-ai-js-mtdyncoqd-tiagos-projects-6ffe6e70.vercel.app",
-        "https://email-ai-js-etcvci9b6-tiagos-projects-6ffe6e70.vercel.app"
+        "https://email-ai-js-py.vercel.app",   # domínio fixo de produção
+        "https://*.vercel.app"                 # qualquer preview do Vercel
     ],
     allow_credentials=True,
     allow_methods=["*"],
