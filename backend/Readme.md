@@ -3,7 +3,8 @@
 ## Visão Geral
 Backend desenvolvido em **Python** com **FastAPI** para classificar textos de emails em duas categorias principais: **Produtivo** e **Improdutivo**.  
 O sistema consome a **OpenAI API** para análise de texto e retorna a categoria e uma resposta sugerida para o frontend.  
-Agora também suporta **upload de arquivos PDF**, realizando parsing automático do conteúdo.
+Agora também suporta **upload de arquivos PDF**, realizando parsing automático do conteúdo.  
+Além disso, o backend realiza **pré-processamento NLP com NLTK** (remoção de stopwords, normalização e lematização) antes de enviar o texto para a API externa.
 
 ---
 
@@ -20,7 +21,7 @@ backend/
 ```
 
 ### Descrição dos Módulos
-- **app.py**: inicializa FastAPI, configura CORS, define modelos de entrada, consome a OpenAI API, registra logs e retorna JSON.  
+- **app.py**: inicializa FastAPI, configura CORS, define modelos de entrada, aplica pipeline NLP (stopwords + lematização), consome a OpenAI API, registra logs e retorna JSON.  
 - **logs/classify.log**: arquivo de log com entradas de classificação.  
 
 ---
@@ -45,6 +46,8 @@ python-dotenv
 PyPDF2
 python-multipart
 ```
+
+> **Nota:** Na primeira execução, o backend baixa automaticamente os recursos necessários do NLTK (stopwords, wordnet, punkt).
 
 ---
 
@@ -89,6 +92,8 @@ Aplicação disponível em:
 http://127.0.0.1:8000
 ```
 
+Durante a primeira execução, o backend pode baixar corpora do NLTK (stopwords, wordnet, punkt). Isso é feito automaticamente.
+
 ---
 
 ## Endpoints da API
@@ -98,6 +103,8 @@ http://127.0.0.1:8000
 | `/health`       | GET    | Verifica se o serviço está ativo            | —                                    | `{ "status": "ok" }`                       | 200              |
 | `/classify`     | POST   | Classifica texto enviado em JSON            | `{ "text": "Preciso saber o status" }` | Campos: `category`, `reply`                | 200, 400, 500    |
 | `/classify-pdf` | POST   | Classifica texto extraído de arquivo PDF    | `multipart/form-data` com campo `file` | Campos: `category`, `reply`                | 200, 400, 500    |
+
+> **Nota:** O texto enviado é normalizado, tokenizado, tem stopwords removidas e passa por lematização antes de ser classificado.
 
 ### Exemplo de Requisição `/classify`
 ```json
@@ -147,12 +154,12 @@ Arquivo: `backend/logs/classify.log`
 
 Formato de linha:
 ```
-YYYY-MM-DD HH:MM:SS | LEVEL | input=<texto> | output=<categoria e resposta>
+YYYY-MM-DD HH:MM:SS | LEVEL | input=<texto> | PREPROCESSED=<texto após NLP> | output=<categoria e resposta>
 ```
 
 Exemplo:
 ```
-2026-01-16 16:45:12 | INFO | input=Preciso saber o status do pedido | output={'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-16 16:45:12 | INFO | input=Preciso saber o status do pedido | PREPROCESSED=preciso saber status pedido | output={'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
 ```
 
 ---
@@ -196,7 +203,7 @@ Frases para validação:
 
 Verificar:
 - `category` e `reply` coerentes  
-- Registro em `classify.log`  
+- Registro em `classify.log` com campo `PREPROCESSED` mostrando texto após NLP  
 - Resposta vinda da OpenAI API  
 - Upload de PDF funcionando corretamente  
 
@@ -205,6 +212,7 @@ Verificar:
 ## Limitações Conhecidas
 - Dependência da resposta da OpenAI API; pode variar conforme modelo usado.  
 - Parsing de PDF depende da qualidade do arquivo (PDFs escaneados como imagem não são suportados).  
+- A lematização do NLTK é baseada em inglês; para português pode não ser perfeita, mas ajuda a reduzir variações.  
 
 ---
 
@@ -220,4 +228,4 @@ Verificar:
 - **CORS**: manter domínios do frontend na lista `allow_origins` conforme ambiente.  
 - **API externa**: definir chave de acesso como variável de ambiente (`OPENAI_API_KEY`).  
 - **Encoding**: respostas JSON devem usar `charset=utf-8`.  
-
+- **NLP**: pipeline atual remove stopwords e aplica lematização; revisar periodicamente para melhorar suporte ao português.  
