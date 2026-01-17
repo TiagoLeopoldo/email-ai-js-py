@@ -12,56 +12,110 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 import io
 
-# Carregar variáveis de ambiente do arquivo .env
+# NLP (NLTK)
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+# -----------------------------------------------------------------------------
+# Boot de ambiente
+# -----------------------------------------------------------------------------
 load_dotenv()
 
 app = FastAPI()
 
-# Configuração de CORS
+# CORS (mantém produção e previews do Vercel)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://email-ai-js-py.vercel.app",   # domínio fixo de produção
-        "https://*.vercel.app"                 # qualquer preview do Vercel
+        "https://email-ai-js-py.vercel.app",
+        "https://*.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Pasta de logs
+# Logs
 os.makedirs("backend/logs", exist_ok=True)
-
 logging.basicConfig(
     filename="backend/logs/classify.log",
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s"
 )
 
+# -----------------------------------------------------------------------------
+# NLTK bootstrap (seguro para produção: tenta baixar se não existir)
+# -----------------------------------------------------------------------------
+def _ensure_nltk_resources():
+    try:
+        nltk.data.find("corpora/stopwords")
+    except LookupError:
+        nltk.download("stopwords")
+    try:
+        nltk.data.find("corpora/wordnet")
+    except LookupError:
+        nltk.download("wordnet")
+    try:
+        nltk.data.find("tokenizers/punkt")
+    except LookupError:
+        nltk.download("punkt")
+
+_ensure_nltk_resources()
+
+# Instâncias NLP
+lemmatizer = WordNetLemmatizer()
+# Stopwords em português; se não houver, usa um fallback mínimo
+try:
+    STOP_PT = set(stopwords.words("portuguese"))
+except Exception:
+    STOP_PT = {
+        "a","o","os","as","de","da","do","das","dos","e","é","em","um","uma",
+        "para","por","com","sem","no","na","nos","nas","que","se","sua","seu"
+    }
+
+# -----------------------------------------------------------------------------
+# Modelos
+# -----------------------------------------------------------------------------
 class TextIn(BaseModel):
     text: str
 
-def preprocess_text(text: str) -> str:
-    """
-    Pré-processa o texto: minúsculas e remove caracteres especiais.
-    """
+# -----------------------------------------------------------------------------
+# NLP helpers
+# -----------------------------------------------------------------------------
+def normalize_text(text: str) -> str:
     text = text.lower()
-    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", "", text)
-    return text.strip()
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
+def tokenize(text: str) -> list:
+    return text.split()
+
+def remove_stopwords(tokens: list) -> list:
+    return [t for t in tokens if t not in STOP_PT and len(t) > 1]
+
+def lemmatize_tokens(tokens: list) -> list:
+    return [lemmatizer.lemmatize(t) for t in tokens]
+
+def preprocess_text(text: str) -> str:
+    norm = normalize_text(text)
+    toks = tokenize(norm)
+    toks = remove_stopwords(toks)
+    toks = lemmatize_tokens(toks)
+    processed = " ".join(toks).strip()
+    return processed if processed else norm
+
+# -----------------------------------------------------------------------------
+# OpenAI Responses API
+# -----------------------------------------------------------------------------
 def extract_output_text(resp_json: dict) -> str:
-    """
-    Extrai texto da resposta da Responses API.
-    """
     try:
         return resp_json["output"][0]["content"][0]["text"].strip()
     except Exception:
         return ""
 
 def classify_text_with_openai(processed_text: str) -> dict:
-    """
-    Consulta a OpenAI Responses API e retorna dict com category e reply.
-    """
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     if not OPENAI_API_KEY:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada no processo.")
@@ -124,10 +178,10 @@ def classify_text_with_openai(processed_text: str) -> dict:
     }
     return output
 
+# -----------------------------------------------------------------------------
+# PDF
+# -----------------------------------------------------------------------------
 def extract_text_from_pdf(file: UploadFile) -> str:
-    """
-    Extrai texto de um arquivo PDF usando PyPDF2.
-    """
     if not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Arquivo inválido: é esperado um PDF.")
 
@@ -158,15 +212,15 @@ def extract_text_from_pdf(file: UploadFile) -> str:
         logging.exception("Falha ao extrair texto do PDF: %s", str(e))
         raise HTTPException(status_code=500, detail="Falha ao processar o PDF.")
 
+# -----------------------------------------------------------------------------
+# Endpoints
+# -----------------------------------------------------------------------------
 @app.get("/health")
 def healthcheck():
     return {"status": "ok"}
 
 @app.post("/classify")
 def classify(payload: TextIn):
-    """
-    Endpoint existente — mantém integração atual com o frontend.
-    """
     text = payload.text.strip()
     if len(text) < 3:
         raise HTTPException(status_code=400, detail="Texto muito curto para classificação.")
@@ -180,9 +234,6 @@ def classify(payload: TextIn):
 
 @app.post("/classify-pdf")
 async def classify_pdf(file: UploadFile = File(...)):
-    """
-    Novo endpoint para PDF — NÃO altera o contrato atual do frontend.
-    """
     pdf_text = extract_text_from_pdf(file)
     processed_text = preprocess_text(pdf_text)
     logging.info("INPUT_PDF: %s chars | PREPROCESSED: %s", len(pdf_text), processed_text[:120])
