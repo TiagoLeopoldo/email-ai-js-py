@@ -180,7 +180,7 @@ def generate_reply_with_openai(category: str, user_text: str) -> str:
     if not OPENAI_API_KEY:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada.")
 
-    model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+    model = os.getenv("OPENAI_MODEL")
 
     url = "https://api.openai.com/v1/responses"
     headers = {
