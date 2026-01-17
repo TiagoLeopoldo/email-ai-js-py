@@ -24,7 +24,7 @@ load_dotenv()
 
 app = FastAPI()
 
-# CORS (mantém produção e previews do Vercel)
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -45,7 +45,7 @@ logging.basicConfig(
 )
 
 # -----------------------------------------------------------------------------
-# NLTK bootstrap (seguro para produção: tenta baixar se não existir)
+# NLTK bootstrap
 # -----------------------------------------------------------------------------
 def _ensure_nltk_resources():
     try:
@@ -63,16 +63,11 @@ def _ensure_nltk_resources():
 
 _ensure_nltk_resources()
 
-# Instâncias NLP
 lemmatizer = WordNetLemmatizer()
-# Stopwords em português; se não houver, usa um fallback mínimo
 try:
     STOP_PT = set(stopwords.words("portuguese"))
 except Exception:
-    STOP_PT = {
-        "a","o","os","as","de","da","do","das","dos","e","é","em","um","uma",
-        "para","por","com","sem","no","na","nos","nas","que","se","sua","seu"
-    }
+    STOP_PT = {"a","o","os","as","de","da","do","das","dos","e","é","em","um","uma","para","por","com","sem","no","na","nos","nas","que","se","sua","seu"}
 
 # -----------------------------------------------------------------------------
 # Modelos
@@ -107,7 +102,22 @@ def preprocess_text(text: str) -> str:
     return processed if processed else norm
 
 # -----------------------------------------------------------------------------
-# OpenAI Responses API
+# Regras fixas de categoria
+# -----------------------------------------------------------------------------
+def apply_rules(processed_text: str) -> str | None:
+    impro_keywords = ["feliz natal", "parabéns", "obrigado", "agradecimento", "felicitações", "bom dia", "boa tarde"]
+    prod_keywords = ["status", "prazo", "cancelar", "erro", "contrato", "pedido", "assinatura", "entrega", "suporte"]
+
+    for kw in impro_keywords:
+        if kw in processed_text:
+            return "Improdutivo"
+    for kw in prod_keywords:
+        if kw in processed_text:
+            return "Produtivo"
+    return None
+
+# -----------------------------------------------------------------------------
+# OpenAI helpers
 # -----------------------------------------------------------------------------
 def extract_output_text(resp_json: dict) -> str:
     try:
@@ -118,7 +128,7 @@ def extract_output_text(resp_json: dict) -> str:
 def classify_text_with_openai(processed_text: str) -> dict:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     if not OPENAI_API_KEY:
-        raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada no processo.")
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada.")
 
     model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 
@@ -147,18 +157,10 @@ def classify_text_with_openai(processed_text: str) -> dict:
         "max_output_tokens": 32
     }
 
-    try:
-        resp = requests.post(url, headers=headers, json=body, timeout=30)
-    except requests.RequestException as e:
-        logging.exception("Erro de rede ao consultar OpenAI: %s", str(e))
-        raise HTTPException(status_code=502, detail="Erro de rede ao consultar API externa de IA.")
-
+    resp = requests.post(url, headers=headers, json=body, timeout=30)
     if resp.status_code < 200 or resp.status_code >= 300:
         logging.error("OpenAI error %s: %s", resp.status_code, resp.text)
-        raise HTTPException(
-            status_code=502,
-            detail=f"Erro ao consultar API externa de IA. Status={resp.status_code}"
-        )
+        raise HTTPException(status_code=502, detail=f"Erro ao consultar API externa de IA. Status={resp.status_code}")
 
     result = resp.json()
     category = extract_output_text(result)
@@ -167,16 +169,46 @@ def classify_text_with_openai(processed_text: str) -> dict:
         logging.warning("Categoria inesperada: '%s' | full=%s", category, result)
         raise HTTPException(status_code=500, detail=f"Categoria inesperada retornada pela IA: {category!r}")
 
-    respostas = {
-        "Produtivo": "Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.",
-        "Improdutivo": "Agradecemos sua mensagem! Não é necessário nenhuma ação neste momento."
+    return {"category": category}
+
+def generate_reply_with_openai(category: str, user_text: str) -> str:
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    if not OPENAI_API_KEY:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada.")
+
+    model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+
+    url = "https://api.openai.com/v1/responses"
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json",
     }
 
-    output = {
-        "category": category,
-        "reply": respostas.get(category, f"Sugestão de resposta para categoria {category}")
+    prompt = (
+        "Você é um assistente que responde emails de forma educada e natural.\n"
+        f"O texto do usuário foi classificado como {category}.\n"
+        "Gere uma resposta curta e humana, sem soar robótica.\n"
+        "Se for Produtivo, mostre que estamos cuidando da solicitação.\n"
+        "Se for Improdutivo, agradeça de forma simpática e natural.\n"
+        f"Texto original: {user_text}"
+    )
+
+    body = {
+        "model": model,
+        "input": [
+            {"role": "system", "content": "Você é um assistente de emails."},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.7,
+        "max_output_tokens": 128
     }
-    return output
+
+    resp = requests.post(url, headers=headers, json=body, timeout=30)
+    if resp.status_code < 200 or resp.status_code >= 300:
+        raise HTTPException(status_code=502, detail="Erro ao gerar resposta personalizada.")
+
+    result = resp.json()
+    return extract_output_text(result)
 
 # -----------------------------------------------------------------------------
 # PDF
@@ -185,32 +217,26 @@ def extract_text_from_pdf(file: UploadFile) -> str:
     if not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Arquivo inválido: é esperado um PDF.")
 
-    try:
-        content = file.file.read()
-        if not content or len(content) == 0:
-            raise HTTPException(status_code=400, detail="PDF vazio ou não lido corretamente.")
+    content = file.file.read()
+    if not content or len(content) == 0:
+        raise HTTPException(status_code=400, detail="PDF vazio ou não lido corretamente.")
 
-        pdf_stream = io.BytesIO(content)
-        reader = PdfReader(pdf_stream)
+    pdf_stream = io.BytesIO(content)
+    reader = PdfReader(pdf_stream)
 
-        pages_text = []
-        for page in reader.pages:
-            try:
-                text = page.extract_text() or ""
-            except Exception:
-                text = ""
-            pages_text.append(text)
+    pages_text = []
+    for page in reader.pages:
+        try:
+            text = page.extract_text() or ""
+        except Exception:
+            text = ""
+        pages_text.append(text)
 
-        full_text = "\n".join(pages_text).strip()
-        if len(full_text) < 3:
-            raise HTTPException(status_code=400, detail="Não foi possível extrair texto útil do PDF.")
+    full_text = "\n".join(pages_text).strip()
+    if len(full_text) < 3:
+        raise HTTPException(status_code=400, detail="Não foi possível extrair texto útil do PDF.")
 
-        return full_text
-    except HTTPException:
-        raise
-    except Exception as e:
-        logging.exception("Falha ao extrair texto do PDF: %s", str(e))
-        raise HTTPException(status_code=500, detail="Falha ao processar o PDF.")
+    return full_text
 
 # -----------------------------------------------------------------------------
 # Endpoints
@@ -228,7 +254,13 @@ def classify(payload: TextIn):
     processed_text = preprocess_text(text)
     logging.info("INPUT: %s | PREPROCESSED: %s", text, processed_text)
 
-    output = classify_text_with_openai(processed_text)
+    category = apply_rules(processed_text)
+    if not category:
+        category = classify_text_with_openai(processed_text)["category"]
+
+    reply = generate_reply_with_openai(category, text)
+    output = {"category": category, "reply": reply}
+
     logging.info("OUTPUT: %s", output)
     return JSONResponse(content=output, media_type="application/json; charset=utf-8")
 
@@ -238,6 +270,12 @@ async def classify_pdf(file: UploadFile = File(...)):
     processed_text = preprocess_text(pdf_text)
     logging.info("INPUT_PDF: %s chars | PREPROCESSED: %s", len(pdf_text), processed_text[:120])
 
-    output = classify_text_with_openai(processed_text)
+    category = apply_rules(processed_text)
+    if not category:
+        category = classify_text_with_openai(processed_text)["category"]
+
+    reply = generate_reply_with_openai(category, pdf_text)
+    output = {"category": category, "reply": reply}
+
     logging.info("OUTPUT_PDF: %s", output)
     return JSONResponse(content=output, media_type="application/json; charset=utf-8")
