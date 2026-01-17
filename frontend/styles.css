@@ -56,6 +56,7 @@ textarea { resize: vertical; min-height: 120px; }
   width: 100%;
 }
 .btn:hover { background: #2563eb; }
+.btn:disabled { background: #93c5fd; cursor: not-allowed; }
 
 .divider { text-align: center; color: var(--muted); margin: 16px 0; position: relative; }
 .divider::before, .divider::after {
@@ -79,6 +80,12 @@ pre {
 }
 
 footer { text-align: center; color: var(--muted); padding: 20px; font-size: 0.9rem; }
+
+.loading {
+  margin-top: 10px;
+  color: var(--muted);
+  font-weight: 600;
+}
 
 @media (max-width: 600px) {
   h1 { font-size: 1.5rem; }

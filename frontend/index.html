@@ -25,7 +25,8 @@
         <label class="label" for="email-file">Faça upload (.txt ou .pdf)</label>
         <input id="email-file" type="file" accept=".txt,.pdf" />
 
-        <button type="submit" class="btn">Classificar e sugerir resposta</button>
+        <button type="submit" class="btn" id="submit-btn">Classificar e sugerir resposta</button>
+        <div id="loading" class="loading hidden" aria-live="polite">Processando…</div>
       </form>
     </section>
 
@@ -38,6 +39,10 @@
       <div class="result-row">
         <span class="result-label">Resposta sugerida:</span>
         <pre id="suggested-reply">—</pre>
+      </div>
+      <div class="result-row hidden" id="error-row">
+        <span class="result-label">Erro:</span>
+        <pre id="error-text">—</pre>
       </div>
     </section>
   </main>

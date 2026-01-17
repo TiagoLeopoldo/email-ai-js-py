@@ -2,7 +2,8 @@
 
 ## Visão Geral
 Este frontend foi desenvolvido utilizando **HTML**, **CSS** e **JavaScript puro**, sem frameworks ou bibliotecas externas.  
-O objetivo é permitir que o usuário insira ou envie o conteúdo de um email, envie esse conteúdo ao backend via requisição HTTP e visualize a classificação e resposta sugerida.
+O objetivo é permitir que o usuário insira ou envie o conteúdo de um email, envie esse conteúdo ao backend via requisição HTTP e visualize a classificação e resposta sugerida.  
+Agora o frontend também possui **estado de carregamento** e **tratamento de erros mais amigável**, exibindo mensagens diretamente na interface.
 
 ---
 
@@ -19,13 +20,16 @@ frontend/
 ### Descrição dos Arquivos
 
 - **index.html**  
-  Estrutura da interface: cabeçalho, formulário com campo de texto e upload de arquivo, botão de envio e área de exibição de resultados.
+  Estrutura da interface: cabeçalho, formulário com campo de texto e upload de arquivo, botão de envio e área de exibição de resultados.  
+  Inclui elementos para exibir **estado de carregamento** (“Processando…”) e **mensagens de erro**.
 
 - **styles.css**  
-  Estilização básica: layout centralizado, botões, campos de entrada e área de resultados. Utiliza fonte Inter via Google Fonts.
+  Estilização básica: layout centralizado, botões, campos de entrada e área de resultados.  
+  Inclui estilos para o botão desabilitado e para a mensagem de carregamento.
 
 - **script.js**  
-  Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify`) e exibe os dados retornados (`category`, `reply`).
+  Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify`) e exibe os dados retornados (`category`, `reply`).  
+  Agora também controla o estado de carregamento e exibe erros diretamente no card de resultados.
 
 ---
 
@@ -51,7 +55,9 @@ frontend/
    ```
 4. Digite um texto ou envie um arquivo `.txt` ou `.pdf`.  
 5. Clique em “Classificar e sugerir resposta”.  
-6. O resultado será exibido na seção “Resultado”.
+6. O resultado será exibido na seção “Resultado”.  
+7. Durante o processamento, o botão ficará desabilitado e aparecerá a mensagem **“Processando…”**.  
+8. Se ocorrer erro, a mensagem será exibida no card de resultados.
 
 ---
 
@@ -67,7 +73,12 @@ frontend/
 
 3. **Resposta exibida**  
    - Categoria (badge colorida).  
-   - Resposta sugerida (texto formatado).
+   - Resposta sugerida (texto formatado).  
+   - Em caso de erro, mensagem exibida no card de resultados.
+
+4. **Estado de carregamento**  
+   - Botão desabilitado durante requisição.  
+   - Mensagem “Processando…” exibida abaixo do botão.
 
 ---
 
@@ -105,7 +116,8 @@ frontend/
 
 - Se nenhum texto for inserido e nenhum arquivo for enviado, exibe alerta.  
 - Se o arquivo não for `.txt` ou `.pdf`, exibe alerta de formato não suportado.  
-- Se houver erro de conexão com o backend, exibe alerta com mensagem de erro.  
+- Se houver erro de conexão ou resposta inválida, a mensagem é exibida diretamente no card de resultados.  
+- Estado de carregamento garante que o usuário saiba que a requisição está em andamento.
 
 ---
 
@@ -120,6 +132,8 @@ frontend/
 - Categoria exibida corretamente (**Produtivo** ou **Improdutivo**).  
 - Resposta sugerida coerente com a intenção.  
 - Layout funcional e responsivo.  
+- Botão desabilitado e mensagem “Processando…” durante requisição.  
+- Mensagem de erro exibida no card em caso de falha.
 
 ---
 
@@ -132,7 +146,7 @@ frontend/
 
 ## Melhorias Futuras
 - Implementar leitura de `.pdf` via biblioteca JS (ex.: PDF.js).  
-- Adicionar validações de conteúdo e feedback visual.  
+- Adicionar validações de conteúdo e feedback visual mais detalhado.  
 - Melhorar responsividade e acessibilidade.  
 - Implementar testes automatizados (unitários e integração).  
 
@@ -142,4 +156,5 @@ frontend/
 - O script depende da estrutura de resposta do backend (`category`, `reply`).  
 - O campo `category` é utilizado para definir cor da borda (verde para **Produtivo**, vermelho para **Improdutivo**).  
 - O botão de envio está vinculado ao evento `submit` do formulário `#email-form`.  
+- O estado de carregamento é controlado via função `setLoading` no `script.js`.  
 
