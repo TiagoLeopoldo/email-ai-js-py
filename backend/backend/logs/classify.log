@@ -167,3 +167,14 @@ noronhaleopoldo  linkedin
 principais competências
 desenvolv
 2026-01-17 02:12:44,561 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-17 03:39:29,796 | INFO | INPUT: Preciso saber o status do pedido 123 | PREPROCESSED: preciso saber status pedido
+2026-01-17 03:39:29,796 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-17 03:39:47,550 | INFO | INPUT: Feliz Natal para toda a equipe | PREPROCESSED: feliz natal toda equipe
+2026-01-17 03:39:47,551 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Agradecemos sua mensagem! Não é necessário nenhuma ação neste momento.'}
+2026-01-17 03:41:27,048 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
+2026-01-17 03:55:23,720 | INFO | INPUT: Feliz Natal para toda a equipe | PREPROCESSED: feliz natal toda equipe
+2026-01-17 03:55:25,813 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Muito obrigado! Desejamos um Natal maravilhoso para você também!'}
+2026-01-17 03:55:47,869 | INFO | INPUT: Preciso saber o status do pedido 123 | PREPROCESSED: preciso saber status pedido
+2026-01-17 03:55:49,727 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Já estamos verificando o status do pedido 123 e em breve retornamos com uma atualização para você. Obrigado pela paciência!'}
+2026-01-17 03:56:23,939 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
+2026-01-17 03:56:25,886 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nObrigado por compartilhar seu currículo detalhado. Estamos analisando suas competências e experiências para verificar as melhores oportunidades que se encaixem no seu perfil. Em breve retornaremos com um posicionamento.\n\nAbraços!'}
