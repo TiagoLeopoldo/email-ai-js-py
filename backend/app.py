@@ -107,6 +107,7 @@ def preprocess_text(text: str) -> str:
 def apply_rules(processed_text: str) -> str | None:
     impro_keywords = ["feliz natal", "parabéns", "obrigado", "agradecimento", "felicitações", "bom dia", "boa tarde"]
     prod_keywords = ["status", "prazo", "cancelar", "erro", "contrato", "pedido", "assinatura", "entrega", "suporte"]
+    irrelevant_keywords = ["azul", "cor", "piada", "brincadeira", "besteira", "nada haver"]
 
     for kw in impro_keywords:
         if kw in processed_text:
@@ -114,6 +115,9 @@ def apply_rules(processed_text: str) -> str | None:
     for kw in prod_keywords:
         if kw in processed_text:
             return "Produtivo"
+    for kw in irrelevant_keywords:
+        if kw in processed_text:
+            return "Irrelevante"
     return None
 
 # -----------------------------------------------------------------------------
@@ -138,7 +142,7 @@ def classify_text_with_openai(processed_text: str) -> dict:
         "Content-Type": "application/json",
     }
 
-    allowed = ["Produtivo", "Improdutivo"]
+    allowed = ["Produtivo", "Improdutivo", "Irrelevante"]
 
     body = {
         "model": model,
@@ -147,7 +151,7 @@ def classify_text_with_openai(processed_text: str) -> dict:
                 "role": "system",
                 "content": (
                     "Classifique o texto do usuário em exatamente UMA das categorias: "
-                    "Produtivo ou Improdutivo. "
+                    "Produtivo, Improdutivo ou Irrelevante. "
                     "Responda apenas com a palavra da categoria."
                 )
             },
@@ -176,7 +180,7 @@ def generate_reply_with_openai(category: str, user_text: str) -> str:
     if not OPENAI_API_KEY:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada.")
 
-    model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 
     url = "https://api.openai.com/v1/responses"
     headers = {
@@ -189,14 +193,19 @@ def generate_reply_with_openai(category: str, user_text: str) -> str:
         f"O texto do usuário foi classificado como {category}.\n"
         "Gere uma resposta curta e humana, sem soar robótica.\n"
         "Se for Produtivo, mostre que estamos cuidando da solicitação.\n"
-        "Se for Improdutivo, agradeça de forma simpática e natural.\n"
+        "Se for Improdutivo, agradeça de forma simpática e cordial.\n"
+        "Se for Irrelevante, refute com educação e explique que não está relacionado aos serviços financeiros.\n"
+        "Se a mensagem for uma pergunta sobre o ramo da empresa, responda de forma profissional e institucional, "
+        "explicando que atuamos no setor financeiro e estamos à disposição para apoiar o cliente.\n"
+        "IMPORTANTE: Não mencione nomes de bancos, fintechs ou empresas específicas. Responda sempre em nome da nossa empresa apenas.\n"
         f"Texto original: {user_text}"
     )
+
 
     body = {
         "model": model,
         "input": [
-            {"role": "system", "content": "Você é um assistente de emails."},
+            {"role": "system", "content": "Você é um assistente de emails de uma empresa de finanças."},
             {"role": "user", "content": prompt}
         ],
         "temperature": 0.7,
