@@ -9,6 +9,8 @@ const errorText = document.getElementById("error-text");
 const loadingEl = document.getElementById("loading");
 const submitBtn = document.getElementById("submit-btn");
 
+const MAX_CHARS = 2000;
+
 function setLoading(isLoading) {
   if (isLoading) {
     submitBtn.disabled = true;
@@ -39,6 +41,11 @@ form.addEventListener("submit", async (e) => {
 
   if (!emailText) {
     showError("Nenhum texto ou arquivo válido foi fornecido.");
+    return;
+  }
+
+  if (emailText.length > MAX_CHARS) {
+    showError(`O texto excede o limite de ${MAX_CHARS} caracteres. Reduza o conteúdo e tente novamente.`);
     return;
   }
 
