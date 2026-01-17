@@ -63,7 +63,7 @@ Instale as dependências listadas em `backend/requirements.txt`:
 pip install -r backend/requirements.txt
 ```
 
-Conteúdo do `requirements.txt` atualizado:
+Conteúdo atualizado do `requirements.txt`:
 ```txt
 fastapi
 uvicorn[standard]
@@ -71,6 +71,8 @@ pydantic
 requests
 nltk
 python-dotenv
+PyPDF2
+python-multipart
 ```
 
 ### Configuração da API Externa
@@ -105,28 +107,11 @@ http://127.0.0.1:8000
 
 ### Endpoints
 
-| Endpoint    | Método | Descrição                                   | Request Body (JSON)                         | Response Body (JSON)                       | Status Codes     |
-|-------------|--------|---------------------------------------------|---------------------------------------------|--------------------------------------------|------------------|
-| `/health`   | GET    | Verifica se o serviço está ativo            | —                                           | `{ "status": "ok" }`                       | 200              |
-| `/classify` | POST   | Classifica o texto via OpenAI API           | `{ "text": "Preciso saber o status do pedido" }` | Campos: `category`, `reply`                | 200, 400, 500    |
-
-### Exemplo de requisição
-```json
-{
-  "text": "Preciso saber o status do pedido"
-}
-```
-
-### Exemplo de resposta
-```json
-{
-  "category": "Produtivo",
-  "reply": "Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida."
-}
-```
-
-### Logs
-Todos os requests ao endpoint `/classify` são registrados em `backend/logs/classify.log`.
+| Endpoint        | Método | Descrição                                   | Request Body                         | Response Body (JSON)                       | Status Codes     |
+|-----------------|--------|---------------------------------------------|--------------------------------------|--------------------------------------------|------------------|
+| `/health`       | GET    | Verifica se o serviço está ativo            | —                                    | `{ "status": "ok" }`                       | 200              |
+| `/classify`     | POST   | Classifica texto enviado em JSON            | `{ "text": "Preciso saber o status" }` | Campos: `category`, `reply`                | 200, 400, 500    |
+| `/classify-pdf` | POST   | Classifica texto extraído de arquivo PDF    | `multipart/form-data` com campo `file` | Campos: `category`, `reply`                | 200, 400, 500    |
 
 ---
 
@@ -150,24 +135,14 @@ Acesse no navegador:
 http://localhost:3000
 ```
 
-Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a requisição ao backend.
-
 ### Fluxo de Uso
 1. Digite o texto do email no campo de texto ou faça upload de um arquivo `.txt` ou `.pdf`.  
 2. Clique em **Classificar e sugerir resposta**.  
-3. O frontend envia requisição `POST` para `http://localhost:8000/classify`.  
+3. O frontend envia requisição `POST`:  
+   - Texto ou `.txt` → `/classify`  
+   - `.pdf` → `/classify-pdf`  
 4. O backend retorna a classificação e resposta sugerida.  
 5. O resultado é exibido na seção **Resultado**.  
-
-### Estados de Carregamento e Erros
-- Durante o envio da requisição, o botão **Classificar e sugerir resposta** fica **desabilitado**.  
-- É exibida a mensagem **“Processando…”** abaixo do botão.  
-- Caso ocorra algum erro, ele é exibido diretamente no card de resultados, com destaque em vermelho.  
-- As mensagens de erro foram **padronizadas**:  
-  - Entrada inválida → “Nenhum texto ou arquivo válido foi fornecido.”  
-  - Formato não suportado → “Formato de arquivo não suportado. Use apenas .txt ou .pdf.”  
-  - Erro interno → “Erro interno ao processar sua solicitação. Tente novamente mais tarde.”  
-  - Falha de conexão → “Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.”  
 
 ---
 
@@ -192,7 +167,6 @@ Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a
 4. Digite ou envie um arquivo de email.  
 5. Clique em **Classificar e sugerir resposta**.  
 6. Veja a categoria e resposta sugerida exibidas na tela.  
-7. Em caso de erro, a mensagem será exibida no card de resultados.  
 
 ---
 
@@ -210,29 +184,31 @@ Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a
 - Registro em `classify.log`.  
 - Botão desabilitado e mensagem “Processando…” durante requisição.  
 - Mensagens de erro exibidas no card em caso de falha.  
+- Upload de `.pdf` funcionando corretamente.  
 
 ---
 
 ## Testar Online (Deploy)
 
 - **Frontend (Vercel):**  
-  `https://email-ai-js-py.vercel.app` [(email-ai-js-py.vercel.app in Bing)](https://www.bing.com/search?q="https%3A%2F%2Femail-ai-js-py.vercel.app%2F")  
+  `https://email-ai-js-py.vercel.app`  
 - **Backend (Render):**  
-  Configurado para rodar em `https://email-ai-js-py.onrender.com`
+  `https://email-ai-js-py.onrender.com`
 
 ---
 
 ## Limitações Conhecidas
-- Extração de texto de arquivos `.pdf` não implementada.  
+- PDFs escaneados como imagem não são suportados (apenas PDFs com texto).  
 - Interface simples, sem design avançado.  
-- Dependência da API externa (variação de resultados).  
+- Dependência da API externa (resultados podem variar conforme modelo da OpenAI).  
 - Não há testes automatizados.  
 
 ---
 
 ## Melhorias Futuras
-- Implementar parsing real de PDF.  
+- Implementar suporte a OCR para PDFs escaneados.  
 - Adicionar testes automatizados (unitários e integração).  
-- Melhorar interface (responsividade, acessibilidade).  
-- Evoluir integração com modelos mais robustos.  
-- Documentar deploy em Vercel (frontend) e Render (backend).  
+- Melhorar interface (responsividade, acessibilidade, design mais moderno).  
+- Evoluir integração com modelos mais robustos da OpenAI ou Hugging Face.  
+- Documentar e automatizar deploy em Vercel (frontend) e Render (backend).  
+- Adicionar observabilidade (logs avançados, métricas e tracing).  

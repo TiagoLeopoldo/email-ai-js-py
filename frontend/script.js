@@ -24,40 +24,64 @@ function setLoading(isLoading) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const file = fileInput.files[0];
   let emailText = textArea.value.trim();
 
-  if (!emailText && fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const ext = file.name.toLowerCase().split(".").pop();
-    if (ext === "txt") {
-      emailText = await file.text();
-    } else if (ext === "pdf") {
-      emailText = "[PDF enviado — o texto será extraído no backend]";
-    } else {
-      showError("Formato de arquivo não suportado. Use apenas .txt ou .pdf.");
-      return;
-    }
-  }
+  clearResults();
 
-  if (!emailText) {
+  if (!emailText && !file) {
     showError("Nenhum texto ou arquivo válido foi fornecido.");
     return;
   }
 
-  if (emailText.length > MAX_CHARS) {
-    showError(`O texto excede o limite de ${MAX_CHARS} caracteres. Reduza o conteúdo e tente novamente.`);
-    return;
-  }
-
-  clearResults();
   setLoading(true);
 
   try {
-    const res = await fetch("https://email-ai-js-py.onrender.com/classify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: emailText }),
-    });
+    let res;
+
+    if (file) {
+      const ext = file.name.toLowerCase().split(".").pop();
+
+      if (ext === "txt") {
+        // Ler conteúdo do TXT e enviar para /classify
+        emailText = await file.text();
+
+        if (emailText.length > MAX_CHARS) {
+          showError(`O texto excede o limite de ${MAX_CHARS} caracteres. Reduza o conteúdo e tente novamente.`);
+          return;
+        }
+
+        res = await fetch("https://email-ai-js-py.onrender.com/classify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: emailText }),
+        });
+      } else if (ext === "pdf") {
+        // Enviar PDF direto para /classify-pdf
+        const formData = new FormData();
+        formData.append("file", file);
+
+        res = await fetch("https://email-ai-js-py.onrender.com/classify-pdf", {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        showError("Formato de arquivo não suportado. Use apenas .txt ou .pdf.");
+        return;
+      }
+    } else {
+      // Texto digitado → /classify
+      if (emailText.length > MAX_CHARS) {
+        showError(`O texto excede o limite de ${MAX_CHARS} caracteres. Reduza o conteúdo e tente novamente.`);
+        return;
+      }
+
+      res = await fetch("https://email-ai-js-py.onrender.com/classify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: emailText }),
+      });
+    }
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));

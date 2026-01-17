@@ -2,7 +2,8 @@
 
 ## Visão Geral
 Backend desenvolvido em **Python** com **FastAPI** para classificar textos de emails em duas categorias principais: **Produtivo** e **Improdutivo**.  
-O sistema consome a **OpenAI API** para análise de texto e retorna a categoria e uma resposta sugerida para o frontend.
+O sistema consome a **OpenAI API** para análise de texto e retorna a categoria e uma resposta sugerida para o frontend.  
+Agora também suporta **upload de arquivos PDF**, realizando parsing automático do conteúdo.
 
 ---
 
@@ -13,7 +14,7 @@ backend/
 │
 ├── logs/
 │   └── classify.log           # Logs de classificação
-├── app.py                     # Aplicação FastAPI (endpoints /health e /classify)
+├── app.py                     # Aplicação FastAPI (endpoints /health, /classify e /classify-pdf)
 ├── requirements.txt           # Dependências do backend
 └── README.md                  # Este documento
 ```
@@ -32,7 +33,7 @@ Instale via `requirements.txt`:
 pip install -r requirements.txt
 ```
 
-Conteúdo do `requirements.txt`:
+Conteúdo atualizado do `requirements.txt`:
 
 ```txt
 fastapi
@@ -41,6 +42,8 @@ pydantic
 requests
 nltk
 python-dotenv
+PyPDF2
+python-multipart
 ```
 
 ---
@@ -90,23 +93,38 @@ http://127.0.0.1:8000
 
 ## Endpoints da API
 
-| Endpoint    | Método | Descrição                                   | Request Body (JSON)                         | Response Body (JSON)                       | Status Codes     |
-|-------------|--------|---------------------------------------------|---------------------------------------------|--------------------------------------------|------------------|
-| `/health`   | GET    | Verifica se o serviço está ativo            | —                                           | `{ "status": "ok" }`                       | 200              |
-| `/classify` | POST   | Classifica o texto via OpenAI API           | `{ "text": "Preciso saber o status do pedido" }` | Campos: `category`, `reply`                | 200, 400, 500    |
+| Endpoint        | Método | Descrição                                   | Request Body                         | Response Body (JSON)                       | Status Codes     |
+|-----------------|--------|---------------------------------------------|--------------------------------------|--------------------------------------------|------------------|
+| `/health`       | GET    | Verifica se o serviço está ativo            | —                                    | `{ "status": "ok" }`                       | 200              |
+| `/classify`     | POST   | Classifica texto enviado em JSON            | `{ "text": "Preciso saber o status" }` | Campos: `category`, `reply`                | 200, 400, 500    |
+| `/classify-pdf` | POST   | Classifica texto extraído de arquivo PDF    | `multipart/form-data` com campo `file` | Campos: `category`, `reply`                | 200, 400, 500    |
 
-### Exemplo de Requisição
+### Exemplo de Requisição `/classify`
 ```json
 {
   "text": "Preciso saber o status do pedido"
 }
 ```
 
-### Exemplo de Resposta
+### Exemplo de Resposta `/classify`
 ```json
 {
   "category": "Produtivo",
   "reply": "Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida."
+}
+```
+
+### Exemplo de Requisição `/classify-pdf` (curl)
+```bash
+curl -X POST "http://127.0.0.1:8000/classify-pdf" \
+  -F "file=@exemplo.pdf"
+```
+
+### Exemplo de Resposta `/classify-pdf`
+```json
+{
+  "category": "Improdutivo",
+  "reply": "Agradecemos sua mensagem! Não é necessário nenhuma ação neste momento."
 }
 ```
 
@@ -142,12 +160,25 @@ Exemplo:
 ## Integração com Frontend
 
 - CORS habilitado para chamadas a partir dos domínios do Vercel.  
-- Exemplo de consumo:
+- Exemplo de consumo `/classify`:
 ```javascript
 const res = await fetch("https://email-ai-js-py.onrender.com/classify", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ text: "Preciso saber o status do pedido" })
+});
+const data = await res.json();
+console.log(data.reply);
+```
+
+- Exemplo de consumo `/classify-pdf`:
+```javascript
+const formData = new FormData();
+formData.append("file", file);
+
+const res = await fetch("https://email-ai-js-py.onrender.com/classify-pdf", {
+  method: "POST",
+  body: formData
 });
 const data = await res.json();
 console.log(data.reply);
@@ -167,17 +198,18 @@ Verificar:
 - `category` e `reply` coerentes  
 - Registro em `classify.log`  
 - Resposta vinda da OpenAI API  
+- Upload de PDF funcionando corretamente  
 
 ---
 
 ## Limitações Conhecidas
-- Extração de texto de PDF não implementada.  
 - Dependência da resposta da OpenAI API; pode variar conforme modelo usado.  
+- Parsing de PDF depende da qualidade do arquivo (PDFs escaneados como imagem não são suportados).  
 
 ---
 
 ## Melhorias Futuras
-- Implementar parsing real de PDF.  
+- Suporte a OCR para PDFs escaneados.  
 - Adicionar testes automatizados.  
 - Evoluir integração com modelos mais robustos.  
 - Adicionar observabilidade (rotação de logs, métricas e tracing).  

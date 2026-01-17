@@ -9,6 +9,9 @@ Atualmente o frontend possui:
 - **Tratamento de erros padronizado**, exibindo mensagens diretamente na interface.  
 - **Validação de limite de texto** (máximo de 2000 caracteres).  
 - **Feedback visual aprimorado**: cores diferenciadas para categorias (verde para produtivo, vermelho para improdutivo), contraste melhorado e responsividade básica.  
+- **Suporte a upload de arquivos `.txt` e `.pdf`**:  
+  - `.txt` → conteúdo lido no frontend e enviado para `/classify`.  
+  - `.pdf` → arquivo enviado via `multipart/form-data` para `/classify-pdf`.  
 
 ---
 
@@ -34,7 +37,7 @@ frontend/
   Responsividade básica para telas menores.
 
 - **script.js**  
-  Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify`) e exibe os dados retornados (`category`, `reply`).  
+  Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify` ou `/classify-pdf`) e exibe os dados retornados (`category`, `reply`).  
   Controla o estado de carregamento, exibe erros diretamente no card de resultados, valida o limite máximo de caracteres e aplica classes visuais para diferenciar categorias.
 
 ---
@@ -42,7 +45,7 @@ frontend/
 ## Requisitos e Execução
 
 ### Pré-requisitos
-- Backend deve estar rodando em `http://localhost:8000` com CORS habilitado.  
+- Backend deve estar rodando em `http://localhost:8000` ou estar disponível em produção (ex.: Render).  
 - Navegador moderno com suporte a `fetch` e `FileReader`.
 
 ### Como Executar
@@ -76,12 +79,12 @@ frontend/
 
 1. **Entrada de texto**  
    - Usuário digita diretamente no campo `textarea`.  
-   - O texto é enviado ao backend via `fetch`.  
+   - O texto é enviado ao backend via `fetch` para `/classify`.  
    - Se ultrapassar 2000 caracteres, o envio é bloqueado.
 
 2. **Upload de arquivo**  
-   - `.txt`: conteúdo lido no frontend e enviado como texto.  
-   - `.pdf`: texto não é extraído no frontend; uma mensagem placeholder é enviada ao backend.  
+   - `.txt`: conteúdo lido no frontend e enviado como texto para `/classify`.  
+   - `.pdf`: arquivo enviado via `multipart/form-data` para `/classify-pdf`.  
    - Se o conteúdo do `.txt` ultrapassar 2000 caracteres, o envio é bloqueado.
 
 3. **Resposta exibida**  
@@ -113,7 +116,7 @@ frontend/
 ### Casos de Entrada
 - Texto direto: “Preciso saber o status da minha solicitação de suporte.”  
 - Upload `.txt`: arquivo com conteúdo “Quero cancelar meu contrato.”  
-- Upload `.pdf`: qualquer arquivo PDF (envia placeholder).  
+- Upload `.pdf`: arquivo PDF com qualquer conteúdo textual.  
 - Texto longo (>2000 caracteres): string repetida para simular excesso.  
 
 ### Resultado Esperado
@@ -123,19 +126,19 @@ frontend/
 - Botão desabilitado e mensagem “Processando…” durante requisição.  
 - Mensagens de erro exibidas no card em caso de falha.  
 - Texto acima de 2000 caracteres bloqueado com mensagem clara.  
+- Upload de `.pdf` funcionando corretamente com resposta do backend.  
 
 ---
 
 ## Limitações Conhecidas
-- Extração de texto de arquivos `.pdf` não é realizada no frontend.  
+- Extração de texto de arquivos `.pdf` não é realizada no frontend (apenas no backend).  
 - Interface simples, sem responsividade avançada ou acessibilidade estendida.  
 - Não há testes automatizados ou cobertura de casos extremos.  
 
 ---
 
 ## Melhorias Futuras
-- Implementar leitura de `.pdf` via biblioteca JS (ex.: PDF.js).  
+- Implementar leitura de `.pdf` via biblioteca JS (ex.: PDF.js) para pré-visualização.  
 - Adicionar validações de conteúdo e feedback visual mais detalhado.  
 - Melhorar responsividade e acessibilidade.  
 - Implementar testes automatizados (unitários e integração).  
-```
