@@ -35,12 +35,19 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify({ text: emailText }),
     });
 
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err?.detail || `Erro ${res.status}`;
+      alert("Falha na classificação: " + msg);
+      return;
+    }
+
     const data = await res.json();
 
     // Exibe os resultados vindos do backend
     categoryEl.textContent = data.category;
     categoryEl.style.borderColor =
-      data.category === "Operacional" ? "#22c55e" : "#ef4444";
+      data.category === "Produtivo" ? "#22c55e" : "#ef4444";
     replyEl.textContent = data.reply;
     results.classList.remove("hidden");
   } catch (error) {

@@ -38,7 +38,7 @@ frontend/
 ### Como Executar
 1. Inicie o backend com:
    ```bash
-   uvicorn app:app --reload
+   python -m uvicorn app:app --reload
    ```
 2. Sirva o frontend via servidor local para evitar problemas de CORS:
    ```bash
@@ -96,8 +96,8 @@ frontend/
   ```
 
 - Campos utilizados da resposta:
-  - `data.category`
-  - `data.reply`
+  - `data.category` (Produtivo ou Improdutivo)  
+  - `data.reply` (resposta humanizada sugerida)
 
 ---
 
@@ -112,12 +112,12 @@ frontend/
 ## Testes Manuais
 
 ### Casos de Entrada
-- Texto direto: “Quero cancelar meu contrato”  
-- Upload `.txt`: arquivo com conteúdo “Preciso saber o prazo do projeto 123”  
-- Upload `.pdf`: qualquer arquivo PDF (envia placeholder)  
+- Texto direto: “Preciso saber o status da minha solicitação de suporte.”  
+- Upload `.txt`: arquivo com conteúdo “Quero cancelar meu contrato.”  
+- Upload `.pdf`: qualquer arquivo PDF (envia placeholder).  
 
 ### Resultado Esperado
-- Categoria exibida corretamente.  
+- Categoria exibida corretamente (**Produtivo** ou **Improdutivo**).  
 - Resposta sugerida coerente com a intenção.  
 - Layout funcional e responsivo.  
 
@@ -140,5 +140,6 @@ frontend/
 
 ## Notas de Manutenção
 - O script depende da estrutura de resposta do backend (`category`, `reply`).  
-- O campo `category` é utilizado para definir cor da borda (verde para “Operacional”, vermelho para demais).  
+- O campo `category` é utilizado para definir cor da borda (verde para **Produtivo**, vermelho para **Improdutivo**).  
 - O botão de envio está vinculado ao evento `submit` do formulário `#email-form`.  
+

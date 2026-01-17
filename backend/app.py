@@ -1,31 +1,34 @@
-# backend/app.py
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from nlp.classifier import classify_text
 import logging
 import os
+import requests
+import re
+
+# Carregar variáveis de ambiente do arquivo .env
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
-# Habilita CORS para permitir chamadas do front-end
-# Em produção, ajuste o domínio do frontend hospedado
+# Configuração de CORS (mantida conforme solicitado)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://email-ai-js-py.vercel.app",
         "https://email-ai-js-mtdyncoqd-tiagos-projects-6ffe6e70.vercel.app",
-        "https://email-ai-js-etcvci9b6-tiagos-projects-6ffe6e70.vercel.app"  ],     # domínio do frontend em produção
+        "https://email-ai-js-etcvci9b6-tiagos-projects-6ffe6e70.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Garante a pasta de logs
+# Pasta de logs
 os.makedirs("backend/logs", exist_ok=True)
 
-# Configuração básica de logging
 logging.basicConfig(
     filename="backend/logs/classify.log",
     level=logging.INFO,
@@ -34,6 +37,23 @@ logging.basicConfig(
 
 class TextIn(BaseModel):
     text: str
+
+def preprocess_text(text: str) -> str:
+    """
+    Pré-processa o texto: minúsculas e remove caracteres especiais.
+    """
+    text = text.lower()
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", "", text)
+    return text.strip()
+
+def extract_output_text(resp_json: dict) -> str:
+    """
+    Extrai texto da resposta da Responses API.
+    """
+    try:
+        return resp_json["output"][0]["content"][0]["text"].strip()
+    except Exception:
+        return ""
 
 @app.get("/health")
 def healthcheck():
@@ -44,8 +64,71 @@ def classify(payload: TextIn):
     text = payload.text.strip()
     if len(text) < 3:
         raise HTTPException(status_code=400, detail="Texto muito curto para classificação.")
-    result = classify_text(text)
-    logging.info(
-        f"input={text} | intent={result['intent']} | confidence={result['confidence']:.4f} | entities={result['entities']}"
-    )
-    return JSONResponse(content=result, media_type="application/json; charset=utf-8")
+
+    processed_text = preprocess_text(text)
+
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    if not OPENAI_API_KEY:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY não configurada no processo.")
+
+    model = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+
+    url = "https://api.openai.com/v1/responses"
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json",
+    }
+
+    allowed = ["Produtivo", "Improdutivo"]
+
+    body = {
+        "model": model,
+        "input": [
+            {
+                "role": "system",
+                "content": (
+                    "Classifique o texto do usuário em exatamente UMA das categorias: "
+                    "Produtivo ou Improdutivo. "
+                    "Responda apenas com a palavra da categoria."
+                )
+            },
+            {"role": "user", "content": processed_text}
+        ],
+        "temperature": 0,
+        "max_output_tokens": 32
+    }
+
+    logging.info("INPUT: %s | PREPROCESSED: %s", text, processed_text)
+
+    try:
+        resp = requests.post(url, headers=headers, json=body, timeout=30)
+    except requests.RequestException as e:
+        logging.exception("Erro de rede ao consultar OpenAI: %s", str(e))
+        raise HTTPException(status_code=502, detail="Erro de rede ao consultar API externa de IA.")
+
+    if resp.status_code < 200 or resp.status_code >= 300:
+        logging.error("OpenAI error %s: %s", resp.status_code, resp.text)
+        raise HTTPException(
+            status_code=502,
+            detail=f"Erro ao consultar API externa de IA. Status={resp.status_code}"
+        )
+
+    result = resp.json()
+    category = extract_output_text(result)
+
+    if category not in allowed:
+        logging.warning("Categoria inesperada: '%s' | full=%s", category, result)
+        raise HTTPException(status_code=500, detail=f"Categoria inesperada retornada pela IA: {category!r}")
+
+    respostas = {
+        "Produtivo": "Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.",
+        "Improdutivo": "Agradecemos sua mensagem! Não é necessário nenhuma ação neste momento."
+    }
+
+    output = {
+        "category": category,
+        "reply": respostas.get(category, f"Sugestão de resposta para categoria {category}")
+    }
+
+    logging.info("OUTPUT: %s", output)
+    return JSONResponse(content=output, media_type="application/json; charset=utf-8")

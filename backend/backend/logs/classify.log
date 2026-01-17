@@ -43,3 +43,109 @@
 2026-01-16 18:12:59,620 | INFO | input=A gabi é perfeita. | intent=default | confidence=0.2291 | entities=[]
 2026-01-16 18:16:40,562 | INFO | input=Gabi perfeita. | intent=default | confidence=0.2291 | entities=[{'text': 'Gabi', 'label': 'PER'}]
 2026-01-16 18:17:02,745 | INFO | input=Qual o status do meu pedido? | intent=status | confidence=0.5471 | entities=[{'text': 'pedido', 'label': 'ORDER'}]
+2026-01-16 21:59:24,426 | ERROR | HF status=410 body={"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co instead."}
+2026-01-16 22:01:54,954 | ERROR | HF status=410 body={"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co instead."}
+2026-01-16 22:16:51,773 | ERROR | OpenAI status=429 body={
+    "error": {
+        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
+        "type": "insufficient_quota",
+        "param": null,
+        "code": "insufficient_quota"
+    }
+}
+
+2026-01-16 22:17:13,110 | ERROR | OpenAI status=429 body={
+    "error": {
+        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
+        "type": "insufficient_quota",
+        "param": null,
+        "code": "insufficient_quota"
+    }
+}
+
+2026-01-16 22:17:23,222 | ERROR | OpenAI status=429 body={
+    "error": {
+        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
+        "type": "insufficient_quota",
+        "param": null,
+        "code": "insufficient_quota"
+    }
+}
+
+2026-01-16 22:22:56,440 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:22:56,974 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:39:37,212 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:39:37,900 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:41:24,181 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:41:24,705 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:41:32,924 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:41:33,884 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:41:41,498 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:41:42,446 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:42:20,175 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:42:20,988 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:42:46,537 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:42:47,087 | ERROR | OpenAI error 400: {
+  "error": {
+    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+    "type": "invalid_request_error",
+    "param": "max_output_tokens",
+    "code": "integer_below_min_value"
+  }
+}
+2026-01-16 22:45:25,513 | INFO | INPUT: Quero cancelar meu contrato
+2026-01-16 22:45:26,681 | INFO | OUTPUT: {'category': 'Jurídico', 'reply': 'Sugestão de resposta para categoria Jurídico'}
+2026-01-16 22:51:13,583 | INFO | INPUT: Preciso saber o prazo da entrega do pedido 123.
+2026-01-16 22:51:15,035 | INFO | OUTPUT: {'category': 'Operacional', 'reply': 'Estamos cuidando do andamento da sua solicitação e garantiremos que tudo ocorra conforme esperado.'}
+2026-01-16 22:51:30,461 | INFO | INPUT: Gostaria de informações sobre a fatura do mês passado.
+2026-01-16 22:51:31,414 | INFO | OUTPUT: {'category': 'Financeiro', 'reply': 'Nossa equipe financeira já está analisando sua demanda e trará uma solução adequada.'}
+2026-01-16 22:54:45,666 | INFO | INPUT: Gostaria de receber uma proposta para novos serviços.
+2026-01-16 22:54:47,990 | INFO | OUTPUT: {'category': 'Comercial', 'priority': 'Média', 'reply': 'Ótimo saber do seu interesse! Nosso time comercial vai entrar em contato para apresentar as melhores opções e garantir que você fique satisfeito.'}
+2026-01-16 23:14:49,131 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
+2026-01-16 23:14:51,062 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-16 23:24:55,608 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
+2026-01-16 23:24:56,495 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
+2026-01-16 23:36:57,168 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
+2026-01-16 23:36:58,982 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}

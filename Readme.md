@@ -1,13 +1,32 @@
 # Email Classifier AI
 
+## Índice
+- [Visão Geral](#visão-geral)  
+- [Estrutura do Projeto](#estrutura-do-projeto)  
+- [Backend](#backend)  
+  - [Dependências](#dependências)  
+  - [Configuração da API Externa](#configuração-da-api-externa)  
+  - [Execução](#execução)  
+  - [Endpoints](#endpoints)  
+  - [Logs](#logs)  
+- [Frontend](#frontend)  
+  - [Estrutura](#estrutura)  
+  - [Execução](#execução-1)  
+  - [Fluxo de Uso](#fluxo-de-uso)  
+- [Integração Frontend ↔ Backend](#integração-frontend--backend)  
+- [Testes Manuais](#testes-manuais)  
+- [Testar Online (Deploy)](#testar-online-deploy)  
+- [Limitações Conhecidas](#limitações-conhecidas)  
+- [Melhorias Futuras](#melhorias-futuras)  
+
+---
+
 ## Visão Geral
-O projeto **Email Classifier AI** tem como objetivo classificar textos de emails em diferentes intenções operacionais e sugerir respostas automáticas com base em regras de negócio e entidades extraídas.  
-Ele é composto por dois módulos principais:
+O projeto **Email Classifier AI** tem como objetivo classificar textos de emails em duas categorias principais — **Produtivo** e **Improdutivo** — e sugerir respostas automáticas adequadas.  
+A solução é composta por dois módulos:
 
-- **Backend**: API em Python/FastAPI responsável pela classificação e geração de respostas.  
-- **Frontend**: Interface em HTML/CSS/JS para interação com o usuário.  
-
-Este documento centraliza a documentação necessária para instalação, execução, integração e testes.
+- **Backend**: API em Python/FastAPI que consome a **OpenAI API** para classificação e geração de respostas.  
+- **Frontend**: Interface em HTML/CSS/JavaScript para interação com o usuário.  
 
 ---
 
@@ -19,15 +38,6 @@ email-ai/
 ├── backend/
 │   ├── logs/
 │   │   └── classify.log
-│   ├── nlp/
-│   │   ├── __init__.py
-│   │   ├── classifier.py
-│   │   ├── ml_classifier.py
-│   │   └── training_data.py
-│   ├── utils/
-│   │   ├── __init__.py
-│   │   ├── replies.py
-│   │   └── response_builder.py
 │   ├── app.py
 │   ├── requirements.txt
 │   └── README.md
@@ -52,13 +62,27 @@ Instale as dependências listadas em `backend/requirements.txt`:
 pip install -r backend/requirements.txt
 ```
 
-Após instalar, baixe o modelo de linguagem portuguesa para spaCy:
-
-```bash
-python -m spacy download pt_core_news_sm
+Conteúdo do `requirements.txt` atualizado:
+```txt
+fastapi
+uvicorn[standard]
+pydantic
+requests
+nltk
+python-dotenv
 ```
 
-Este modelo é necessário para a extração de entidades e processamento de texto em português.
+### Configuração da API Externa
+Este backend consome a **OpenAI API**.  
+É necessário definir a variável de ambiente `OPENAI_API_KEY` com sua chave de acesso.  
+
+No Render ou em execução local:
+1. Crie um arquivo `.env` dentro da pasta `backend`.  
+2. Adicione as variáveis:  
+   ```
+   OPENAI_API_KEY=sua_chave_openai_aqui
+   OPENAI_MODEL=gpt-4.1-mini
+   ```
 
 ### Execução
 
@@ -70,7 +94,7 @@ uvicorn backend.app:app --reload
 **Opção 2: Executar de dentro da pasta backend**
 ```bash
 cd backend
-uvicorn app:app --reload
+python -m uvicorn app:app --reload
 ```
 
 O servidor estará disponível em:
@@ -83,34 +107,20 @@ http://127.0.0.1:8000
 | Endpoint    | Método | Descrição                                   | Request Body (JSON)                         | Response Body (JSON)                       | Status Codes     |
 |-------------|--------|---------------------------------------------|---------------------------------------------|--------------------------------------------|------------------|
 | `/health`   | GET    | Verifica se o serviço está ativo            | —                                           | `{ "status": "ok" }`                       | 200              |
-| `/classify` | POST   | Classifica o texto e retorna dados completos| `{ "text": "Quero cancelar meu contrato" }` | Campos: `category`, `subcategory`, `intent`, `reply`, `tokens`, `entities`, `confidence`, `proba` | 200, 400, 500    |
+| `/classify` | POST   | Classifica o texto via OpenAI API           | `{ "text": "Preciso saber o status do pedido" }` | Campos: `category`, `reply`                | 200, 400, 500    |
 
 ### Exemplo de requisição
 ```json
 {
-  "text": "Quero cancelar meu contrato"
+  "text": "Preciso saber o status do pedido"
 }
 ```
 
 ### Exemplo de resposta
 ```json
 {
-  "category": "Operacional",
-  "subcategory": "cancelamento",
-  "intent": "cancelamento",
-  "reply": "Certo, você deseja cancelar. Vou encaminhar para realizar o cancelamento com segurança. Contexto identificado: contrato.",
-  "tokens": ["Quero", "cancelar", "meu", "contrato"],
-  "entities": [
-    { "text": "contrato", "label": "CONTRACT" }
-  ],
-  "confidence": 0.5021,
-  "proba": {
-    "cancelamento": 0.5021,
-    "erro": 0.1124,
-    "humano": 0.1118,
-    "prazo": 0.1214,
-    "status": 0.1521
-  }
+  "category": "Produtivo",
+  "reply": "Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida."
 }
 ```
 
@@ -123,7 +133,7 @@ Todos os requests ao endpoint `/classify` são registrados em `backend/logs/clas
 
 ### Estrutura
 - **index.html**: página principal com formulário de entrada e área de resultados.  
-- **styles.css**: estilos básicos da interface.  
+- **styles.css**: estilos da interface.  
 - **script.js**: lógica de envio de requisições ao backend e exibição dos resultados.  
 
 ### Execução
@@ -141,7 +151,7 @@ http://localhost:3000
 
 Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a requisição ao backend.
 
-### Fluxo de uso
+### Fluxo de Uso
 1. Digite o texto do email no campo de texto ou faça upload de um arquivo `.txt` ou `.pdf`.  
 2. Clique em **Classificar e sugerir resposta**.  
 3. O frontend envia requisição `POST` para `http://localhost:8000/classify`.  
@@ -160,7 +170,7 @@ Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a
 ### Passo a passo
 1. Inicie o backend:
    ```bash
-   uvicorn backend.app:app --reload
+   python -m uvicorn app:app --reload
    ```
 2. Sirva o frontend:
    ```bash
@@ -177,23 +187,31 @@ Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a
 ## Testes Manuais
 
 ### Casos de entrada
-- **Cancelamento:** "Quero cancelar meu contrato"  
-- **Prazo:** "Preciso saber o prazo do projeto 123"  
-- **Status:** "Quero acompanhar o status do pedido 789"  
-- **Erro:** "Recebi uma mensagem de erro durante o processo"  
-- **Humano:** "Quero falar com um atendente humano"  
+- **Produtivo:** "Preciso saber o prazo do projeto 123"  
+- **Produtivo:** "Quero acompanhar o status do pedido 789"  
+- **Improdutivo:** "Feliz Natal para toda a equipe"  
+- **Improdutivo:** "Mensagem de agradecimento sem solicitação"  
 
 ### Resultado esperado
 - Categoria exibida corretamente.  
 - Resposta sugerida coerente com a intenção.  
-- Entidades extraídas quando aplicável.  
 - Registro em `classify.log`.  
+
+---
+
+## Testar Online (Deploy)
+
+- **Frontend (Vercel):**  
+  [https://email-ai-js-py.vercel.app](https://email-ai-js-py.vercel.app)  
+- **Backend (Render):**  
+  Configurado para rodar em `https://email-ai-js-py.onrender.com`
 
 ---
 
 ## Limitações Conhecidas
 - Extração de texto de arquivos `.pdf` não implementada.  
 - Interface simples, sem design avançado.  
+- Dependência da API externa (variação de resultados).  
 - Não há testes automatizados.  
 
 ---
@@ -202,5 +220,6 @@ Se abrir o `index.html` diretamente (via `file://`), o navegador pode bloquear a
 - Implementar parsing real de PDF.  
 - Adicionar testes automatizados (unitários e integração).  
 - Melhorar interface (responsividade, acessibilidade).  
-- Expandir modelo de NLP para maior precisão.  
-- Documentar deploy em Vercel (frontend) e Render/Railway (backend).  
+- Evoluir integração com modelos mais robustos.  
+- Documentar deploy em Vercel (frontend) e Render (backend).  
+
