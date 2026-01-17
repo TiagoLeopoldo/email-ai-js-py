@@ -3,7 +3,7 @@
 ## Visão Geral
 Este frontend foi desenvolvido utilizando **HTML**, **CSS** e **JavaScript puro**, sem frameworks ou bibliotecas externas.  
 O objetivo é permitir que o usuário insira ou envie o conteúdo de um email, envie esse conteúdo ao backend via requisição HTTP e visualize a classificação e resposta sugerida.  
-Agora o frontend também possui **estado de carregamento** e **tratamento de erros mais amigável**, exibindo mensagens diretamente na interface.
+Agora o frontend também possui **estado de carregamento** e **tratamento de erros padronizado**, exibindo mensagens diretamente na interface de forma clara e amigável.
 
 ---
 
@@ -21,15 +21,15 @@ frontend/
 
 - **index.html**  
   Estrutura da interface: cabeçalho, formulário com campo de texto e upload de arquivo, botão de envio e área de exibição de resultados.  
-  Inclui elementos para exibir **estado de carregamento** (“Processando…”) e **mensagens de erro**.
+  Inclui elementos para exibir **estado de carregamento** (“Processando…”) e **mensagens de erro padronizadas**.
 
 - **styles.css**  
   Estilização básica: layout centralizado, botões, campos de entrada e área de resultados.  
-  Inclui estilos para o botão desabilitado e para a mensagem de carregamento.
+  Inclui estilos para o botão desabilitado, para a mensagem de carregamento e para mensagens de erro em destaque vermelho.
 
 - **script.js**  
   Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify`) e exibe os dados retornados (`category`, `reply`).  
-  Agora também controla o estado de carregamento e exibe erros diretamente no card de resultados.
+  Agora também controla o estado de carregamento e exibe erros diretamente no card de resultados, com mensagens padronizadas.
 
 ---
 
@@ -57,7 +57,7 @@ frontend/
 5. Clique em “Classificar e sugerir resposta”.  
 6. O resultado será exibido na seção “Resultado”.  
 7. Durante o processamento, o botão ficará desabilitado e aparecerá a mensagem **“Processando…”**.  
-8. Se ocorrer erro, a mensagem será exibida no card de resultados.
+8. Se ocorrer erro, a mensagem será exibida no card de resultados em vermelho.
 
 ---
 
@@ -74,7 +74,7 @@ frontend/
 3. **Resposta exibida**  
    - Categoria (badge colorida).  
    - Resposta sugerida (texto formatado).  
-   - Em caso de erro, mensagem exibida no card de resultados.
+   - Em caso de erro, mensagem exibida no card de resultados em vermelho.
 
 4. **Estado de carregamento**  
    - Botão desabilitado durante requisição.  
@@ -114,9 +114,11 @@ frontend/
 
 ## Validações e Tratamento de Erros
 
-- Se nenhum texto for inserido e nenhum arquivo for enviado, exibe alerta.  
-- Se o arquivo não for `.txt` ou `.pdf`, exibe alerta de formato não suportado.  
-- Se houver erro de conexão ou resposta inválida, a mensagem é exibida diretamente no card de resultados.  
+- Se nenhum texto for inserido e nenhum arquivo for enviado → **“Nenhum texto ou arquivo válido foi fornecido.”**  
+- Se o arquivo não for `.txt` ou `.pdf` → **“Formato de arquivo não suportado. Use apenas .txt ou .pdf.”**  
+- Se houver erro interno no backend → **“Erro interno ao processar sua solicitação. Tente novamente mais tarde.”**  
+- Se houver falha de conexão → **“Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.”**  
+- Todas as mensagens de erro são exibidas diretamente no card de resultados, em vermelho.  
 - Estado de carregamento garante que o usuário saiba que a requisição está em andamento.
 
 ---
@@ -133,7 +135,7 @@ frontend/
 - Resposta sugerida coerente com a intenção.  
 - Layout funcional e responsivo.  
 - Botão desabilitado e mensagem “Processando…” durante requisição.  
-- Mensagem de erro exibida no card em caso de falha.
+- Mensagens de erro exibidas no card em caso de falha, padronizadas e amigáveis.
 
 ---
 
@@ -157,4 +159,4 @@ frontend/
 - O campo `category` é utilizado para definir cor da borda (verde para **Produtivo**, vermelho para **Improdutivo**).  
 - O botão de envio está vinculado ao evento `submit` do formulário `#email-form`.  
 - O estado de carregamento é controlado via função `setLoading` no `script.js`.  
-
+- O tratamento de erros é centralizado na função `showError`, garantindo mensagens consistentes e padronizadas.  

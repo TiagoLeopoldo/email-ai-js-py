@@ -87,6 +87,11 @@ footer { text-align: center; color: var(--muted); padding: 20px; font-size: 0.9r
   font-weight: 600;
 }
 
+#error-row {
+  color: var(--danger);
+  font-weight: 600;
+}
+
 @media (max-width: 600px) {
   h1 { font-size: 1.5rem; }
   .btn { font-size: 0.95rem; padding: 10px 14px; }

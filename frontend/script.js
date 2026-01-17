@@ -30,26 +30,19 @@ form.addEventListener("submit", async (e) => {
     if (ext === "txt") {
       emailText = await file.text();
     } else if (ext === "pdf") {
-      // Mantém comportamento atual (placeholder) até implementarmos parsing no backend
       emailText = "[PDF enviado — o texto será extraído no backend]";
     } else {
-      alert("Formato não suportado. Use .txt ou .pdf");
+      showError("Formato de arquivo não suportado. Use apenas .txt ou .pdf.");
       return;
     }
   }
 
   if (!emailText) {
-    alert("Insira texto ou faça upload de um arquivo.");
+    showError("Nenhum texto ou arquivo válido foi fornecido.");
     return;
   }
 
-  // Limpa estado anterior
-  errorRow.classList.add("hidden");
-  errorText.textContent = "—";
-  results.classList.add("hidden");
-  categoryEl.textContent = "—";
-  replyEl.textContent = "—";
-
+  clearResults();
   setLoading(true);
 
   try {
@@ -61,25 +54,34 @@ form.addEventListener("submit", async (e) => {
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      const msg = err?.detail || `Erro ${res.status}`;
-      errorText.textContent = msg;
-      errorRow.classList.remove("hidden");
-      results.classList.remove("hidden");
+      const msg = err?.detail || "Erro interno ao processar sua solicitação. Tente novamente mais tarde.";
+      showError(msg);
       return;
     }
 
     const data = await res.json();
-
     categoryEl.textContent = data.category;
     categoryEl.style.borderColor =
       data.category === "Produtivo" ? "#22c55e" : "#ef4444";
     replyEl.textContent = data.reply;
     results.classList.remove("hidden");
   } catch (error) {
-    errorText.textContent = "Erro ao conectar com o backend: " + error;
-    errorRow.classList.remove("hidden");
-    results.classList.remove("hidden");
+    showError("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.");
   } finally {
     setLoading(false);
   }
 });
+
+function showError(message) {
+  errorText.textContent = message;
+  errorRow.classList.remove("hidden");
+  results.classList.remove("hidden");
+}
+
+function clearResults() {
+  errorRow.classList.add("hidden");
+  errorText.textContent = "—";
+  results.classList.add("hidden");
+  categoryEl.textContent = "—";
+  replyEl.textContent = "—";
+}
