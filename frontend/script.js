@@ -68,8 +68,14 @@ form.addEventListener("submit", async (e) => {
 
     const data = await res.json();
     categoryEl.textContent = data.category;
-    categoryEl.style.borderColor =
-      data.category === "Produtivo" ? "#22c55e" : "#ef4444";
+    categoryEl.classList.remove("category-productive", "category-unproductive");
+
+    if (data.category === "Produtivo") {
+      categoryEl.classList.add("category-productive");
+    } else {
+      categoryEl.classList.add("category-unproductive");
+    }
+
     replyEl.textContent = data.reply;
     results.classList.remove("hidden");
   } catch (error) {
@@ -90,5 +96,6 @@ function clearResults() {
   errorText.textContent = "—";
   results.classList.add("hidden");
   categoryEl.textContent = "—";
+  categoryEl.classList.remove("category-productive", "category-unproductive");
   replyEl.textContent = "—";
 }

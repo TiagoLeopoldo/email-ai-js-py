@@ -3,10 +3,12 @@
 ## Visão Geral
 Este frontend foi desenvolvido utilizando **HTML**, **CSS** e **JavaScript puro**, sem frameworks ou bibliotecas externas.  
 O objetivo é permitir que o usuário insira ou envie o conteúdo de um email, envie esse conteúdo ao backend via requisição HTTP e visualize a classificação e resposta sugerida.  
-Agora o frontend também possui:
+
+Atualmente o frontend possui:
 - **Estado de carregamento** (botão desabilitado + mensagem “Processando…”).  
 - **Tratamento de erros padronizado**, exibindo mensagens diretamente na interface.  
 - **Validação de limite de texto** (máximo de 2000 caracteres).  
+- **Feedback visual aprimorado**: cores diferenciadas para categorias (verde para produtivo, vermelho para improdutivo), contraste melhorado e responsividade básica.  
 
 ---
 
@@ -24,15 +26,16 @@ frontend/
 
 - **index.html**  
   Estrutura da interface: cabeçalho, formulário com campo de texto e upload de arquivo, botão de envio e área de exibição de resultados.  
-  Inclui elementos para exibir **estado de carregamento**, **mensagens de erro** e validação de limite de texto.
+  Inclui elementos para exibir **estado de carregamento**, **mensagens de erro**, validação de limite de texto e feedback visual.
 
 - **styles.css**  
   Estilização básica: layout centralizado, botões, campos de entrada e área de resultados.  
-  Inclui estilos para o botão desabilitado, para a mensagem de carregamento e para mensagens de erro em destaque vermelho.
+  Inclui estilos para o botão desabilitado, para a mensagem de carregamento, para mensagens de erro em destaque vermelho e para categorias com cores diferenciadas (verde/vermelho).  
+  Responsividade básica para telas menores.
 
 - **script.js**  
   Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify`) e exibe os dados retornados (`category`, `reply`).  
-  Agora também controla o estado de carregamento, exibe erros diretamente no card de resultados e valida o limite máximo de caracteres.
+  Controla o estado de carregamento, exibe erros diretamente no card de resultados, valida o limite máximo de caracteres e aplica classes visuais para diferenciar categorias.
 
 ---
 
@@ -62,7 +65,10 @@ frontend/
 7. Durante o processamento, o botão ficará desabilitado e aparecerá a mensagem **“Processando…”**.  
 8. Se ocorrer erro, a mensagem será exibida no card de resultados.  
 9. Se o texto ultrapassar **2000 caracteres**, o envio será bloqueado e aparecerá a mensagem:  
-   **“O texto excede o limite de 2000 caracteres. Reduza o conteúdo e tente novamente.”**
+   **“O texto excede o limite de 2000 caracteres. Reduza o conteúdo e tente novamente.”**  
+10. A categoria será exibida com cores diferenciadas:  
+    - Verde para **Produtivo**.  
+    - Vermelho para **Improdutivo**.  
 
 ---
 
@@ -79,43 +85,13 @@ frontend/
    - Se o conteúdo do `.txt` ultrapassar 2000 caracteres, o envio é bloqueado.
 
 3. **Resposta exibida**  
-   - Categoria (badge colorida).  
+   - Categoria (badge colorida: verde ou vermelho).  
    - Resposta sugerida (texto formatado).  
    - Em caso de erro, mensagem exibida no card de resultados em vermelho.
 
 4. **Estado de carregamento**  
    - Botão desabilitado durante requisição.  
    - Mensagem “Processando…” exibida abaixo do botão.
-
----
-
-## Integração com Backend
-
-- Requisição `POST` para:
-  ```
-  http://localhost:8000/classify
-  ```
-
-- Corpo da requisição:
-  ```json
-  {
-    "text": "<conteúdo do email>"
-  }
-  ```
-
-- Exemplo de chamada no `script.js`:
-  ```javascript
-  const res = await fetch("http://localhost:8000/classify", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: emailText })
-  });
-  const data = await res.json();
-  ```
-
-- Campos utilizados da resposta:
-  - `data.category` (Produtivo ou Improdutivo)  
-  - `data.reply` (resposta humanizada sugerida)
 
 ---
 
@@ -127,7 +103,8 @@ frontend/
 - Erro interno → **“Erro interno ao processar sua solicitação. Tente novamente mais tarde.”**  
 - Falha de conexão → **“Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.”**  
 - Todas as mensagens de erro são exibidas diretamente no card de resultados, em vermelho.  
-- Estado de carregamento garante que o usuário saiba que a requisição está em andamento.
+- Estado de carregamento garante que o usuário saiba que a requisição está em andamento.  
+- Feedback visual reforça a categoria com cores diferenciadas.  
 
 ---
 
@@ -140,12 +117,12 @@ frontend/
 - Texto longo (>2000 caracteres): string repetida para simular excesso.  
 
 ### Resultado Esperado
-- Categoria exibida corretamente (**Produtivo** ou **Improdutivo**).  
+- Categoria exibida corretamente (**Produtivo** ou **Improdutivo**) com cores diferenciadas.  
 - Resposta sugerida coerente com a intenção.  
 - Layout funcional e responsivo.  
 - Botão desabilitado e mensagem “Processando…” durante requisição.  
 - Mensagens de erro exibidas no card em caso de falha.  
-- Texto acima de 2000 caracteres bloqueado com mensagem clara.
+- Texto acima de 2000 caracteres bloqueado com mensagem clara.  
 
 ---
 
@@ -161,13 +138,4 @@ frontend/
 - Adicionar validações de conteúdo e feedback visual mais detalhado.  
 - Melhorar responsividade e acessibilidade.  
 - Implementar testes automatizados (unitários e integração).  
-
----
-
-## Notas de Manutenção
-- O script depende da estrutura de resposta do backend (`category`, `reply`).  
-- O campo `category` é utilizado para definir cor da borda (verde para **Produtivo**, vermelho para **Improdutivo**).  
-- O botão de envio está vinculado ao evento `submit` do formulário `#email-form`.  
-- O estado de carregamento é controlado via função `setLoading` no `script.js`.  
-- O tratamento de erros é centralizado na função `showError`, garantindo mensagens consistentes e padronizadas.  
-- A validação de limite de texto é feita antes do envio, bloqueando entradas acima de 2000 caracteres.  
+```
