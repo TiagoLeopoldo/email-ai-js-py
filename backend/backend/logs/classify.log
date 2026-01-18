@@ -1,206 +1,34 @@
-2026-01-16 12:07:41,609 | INFO | input=Gostaria de saber o prazo da entrega do pedido 789 para 15 de fevereiro | intent=prazo | confidence=0.3333 | entities=[{'text': '789', 'label': 'NUMBER'}, {'text': '15 de fevereiro', 'label': 'DATE'}]
-2026-01-16 12:09:31,264 | INFO | input=Gostaria de saber o prazo da entrega do pedido 789 para 15 de fevereiro | intent=prazo | confidence=0.3814 | entities=[{'text': '789', 'label': 'NUMBER'}, {'text': '15 de fevereiro', 'label': 'DATE'}]
-2026-01-16 12:09:31,292 | INFO | input=Preciso de status da requisição 123 | intent=status | confidence=0.4057 | entities=[{'text': '123', 'label': 'NUMBER'}]
-2026-01-16 12:09:31,306 | INFO | input=Quero cancelar meu pedido imediatamente | intent=cancelamento | confidence=0.5189 | entities=[]
-2026-01-16 12:09:31,319 | INFO | input=Estou com erro no sistema ao enviar formulário | intent=erro | confidence=0.5823 | entities=[]
-2026-01-16 12:09:31,332 | INFO | input=Quero falar com um atendente humano por telefone | intent=humano | confidence=0.7123 | entities=[]
-2026-01-16 12:09:31,346 | INFO | input=Qual a deadline do projeto? | intent=prazo | confidence=0.3898 | entities=[]
-2026-01-16 12:09:31,361 | INFO | input=Desejo encerrar minha assinatura | intent=cancelamento | confidence=0.5142 | entities=[]
-2026-01-16 12:09:31,375 | INFO | input=Recebi uma mensagem de erro durante o processo | intent=erro | confidence=0.4661 | entities=[]
-2026-01-16 12:09:31,390 | INFO | input=Quero verificar o andamento da solicitação | intent=status | confidence=0.4028 | entities=[{'text': 'Quero', 'label': 'PER'}]
-2026-01-16 12:09:31,403 | INFO | input=Preciso saber a data limite para conclusão | intent=prazo | confidence=0.4617 | entities=[]
-2026-01-16 12:16:07,056 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:16:07,106 | INFO | input=Preciso saber o prazo do projeto 123 | intent=prazo | confidence=0.3935 | entities=[{'text': '123', 'label': 'NUMBER'}, {'text': 'projeto', 'label': 'PROJECT'}]
-2026-01-16 12:16:07,120 | INFO | input=Desejo encerrar minha assinatura | intent=cancelamento | confidence=0.5142 | entities=[{'text': 'assinatura', 'label': 'SUBSCRIPTION'}]
-2026-01-16 12:16:07,133 | INFO | input=Gostaria de verificar a solicitação 456 | intent=status | confidence=0.3015 | entities=[{'text': '456', 'label': 'NUMBER'}, {'text': 'solicitação', 'label': 'REQUEST'}]
-2026-01-16 12:16:07,147 | INFO | input=Quero acompanhar o status do pedido 789 | intent=status | confidence=0.5648 | entities=[{'text': '789', 'label': 'NUMBER'}, {'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 12:18:52,752 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:18:52,769 | INFO | input=Preciso saber o prazo do projeto 123 | intent=prazo | confidence=0.3935 | entities=[{'text': '123', 'label': 'NUMBER'}, {'text': 'projeto', 'label': 'PROJECT'}]
-2026-01-16 12:18:52,783 | INFO | input=Desejo encerrar minha assinatura | intent=cancelamento | confidence=0.5142 | entities=[{'text': 'assinatura', 'label': 'SUBSCRIPTION'}]
-2026-01-16 12:18:52,798 | INFO | input=Gostaria de verificar a solicitação 456 | intent=status | confidence=0.3015 | entities=[{'text': '456', 'label': 'NUMBER'}, {'text': 'solicitação', 'label': 'REQUEST'}]
-2026-01-16 12:18:52,812 | INFO | input=Quero acompanhar o status do pedido 789 | intent=status | confidence=0.5648 | entities=[{'text': '789', 'label': 'NUMBER'}, {'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 12:20:19,128 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:20:19,143 | INFO | input=Preciso saber o prazo do projeto 123 | intent=prazo | confidence=0.3935 | entities=[{'text': '123', 'label': 'NUMBER'}, {'text': 'projeto', 'label': 'PROJECT'}]
-2026-01-16 12:20:19,157 | INFO | input=Desejo encerrar minha assinatura | intent=cancelamento | confidence=0.5142 | entities=[{'text': 'assinatura', 'label': 'SUBSCRIPTION'}]
-2026-01-16 12:20:19,171 | INFO | input=Gostaria de verificar a solicitação 456 | intent=status | confidence=0.3015 | entities=[{'text': '456', 'label': 'NUMBER'}, {'text': 'solicitação', 'label': 'REQUEST'}]
-2026-01-16 12:20:19,186 | INFO | input=Quero acompanhar o status do pedido 789 | intent=status | confidence=0.5648 | entities=[{'text': '789', 'label': 'NUMBER'}, {'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 12:27:40,495 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:37:13,422 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:37:25,572 | INFO | input=Novo contrato | intent=default | confidence=0.2460 | entities=[{'text': 'Novo contrato', 'label': 'LOC'}, {'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 12:37:34,927 | INFO | input=bola | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:27,166 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:29,003 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:31,653 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:34,156 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:34,323 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:34,475 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 17:02:34,642 | INFO | input=Boa tarde, tenho duvidas. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 18:05:02,295 | INFO | input=Quero cancelar meu contrato | intent=cancelamento | confidence=0.5022 | entities=[{'text': 'contrato', 'label': 'CONTRACT'}]
-2026-01-16 18:09:58,520 | INFO | input=qual status do meu pedido? | intent=status | confidence=0.5471 | entities=[{'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 18:10:39,441 | INFO | input=qual status do meu pedido? | intent=status | confidence=0.5471 | entities=[{'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 18:11:02,210 | INFO | input=oi? | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 18:12:57,725 | INFO | input=A gabi é perfeita. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 18:12:59,620 | INFO | input=A gabi é perfeita. | intent=default | confidence=0.2291 | entities=[]
-2026-01-16 18:16:40,562 | INFO | input=Gabi perfeita. | intent=default | confidence=0.2291 | entities=[{'text': 'Gabi', 'label': 'PER'}]
-2026-01-16 18:17:02,745 | INFO | input=Qual o status do meu pedido? | intent=status | confidence=0.5471 | entities=[{'text': 'pedido', 'label': 'ORDER'}]
-2026-01-16 21:59:24,426 | ERROR | HF status=410 body={"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co instead."}
-2026-01-16 22:01:54,954 | ERROR | HF status=410 body={"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.huggingface.co instead."}
-2026-01-16 22:16:51,773 | ERROR | OpenAI status=429 body={
-    "error": {
-        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
-        "type": "insufficient_quota",
-        "param": null,
-        "code": "insufficient_quota"
-    }
-}
-
-2026-01-16 22:17:13,110 | ERROR | OpenAI status=429 body={
-    "error": {
-        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
-        "type": "insufficient_quota",
-        "param": null,
-        "code": "insufficient_quota"
-    }
-}
-
-2026-01-16 22:17:23,222 | ERROR | OpenAI status=429 body={
-    "error": {
-        "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.",
-        "type": "insufficient_quota",
-        "param": null,
-        "code": "insufficient_quota"
-    }
-}
-
-2026-01-16 22:22:56,440 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:22:56,974 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:39:37,212 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:39:37,900 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:41:24,181 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:41:24,705 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:41:32,924 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:41:33,884 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:41:41,498 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:41:42,446 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:42:20,175 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:42:20,988 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:42:46,537 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:42:47,087 | ERROR | OpenAI error 400: {
-  "error": {
-    "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
-    "type": "invalid_request_error",
-    "param": "max_output_tokens",
-    "code": "integer_below_min_value"
-  }
-}
-2026-01-16 22:45:25,513 | INFO | INPUT: Quero cancelar meu contrato
-2026-01-16 22:45:26,681 | INFO | OUTPUT: {'category': 'Jurídico', 'reply': 'Sugestão de resposta para categoria Jurídico'}
-2026-01-16 22:51:13,583 | INFO | INPUT: Preciso saber o prazo da entrega do pedido 123.
-2026-01-16 22:51:15,035 | INFO | OUTPUT: {'category': 'Operacional', 'reply': 'Estamos cuidando do andamento da sua solicitação e garantiremos que tudo ocorra conforme esperado.'}
-2026-01-16 22:51:30,461 | INFO | INPUT: Gostaria de informações sobre a fatura do mês passado.
-2026-01-16 22:51:31,414 | INFO | OUTPUT: {'category': 'Financeiro', 'reply': 'Nossa equipe financeira já está analisando sua demanda e trará uma solução adequada.'}
-2026-01-16 22:54:45,666 | INFO | INPUT: Gostaria de receber uma proposta para novos serviços.
-2026-01-16 22:54:47,990 | INFO | OUTPUT: {'category': 'Comercial', 'priority': 'Média', 'reply': 'Ótimo saber do seu interesse! Nosso time comercial vai entrar em contato para apresentar as melhores opções e garantir que você fique satisfeito.'}
-2026-01-16 23:14:49,131 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
-2026-01-16 23:14:51,062 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
-2026-01-16 23:24:55,608 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
-2026-01-16 23:24:56,495 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
-2026-01-16 23:36:57,168 | INFO | INPUT: Preciso saber o status da minha solicitação de suporte. | PREPROCESSED: preciso saber status solicitação suporte
-2026-01-16 23:36:58,982 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
-2026-01-17 02:09:18,679 | ERROR | Form data requires "python-multipart" to be installed. 
-You can install "python-multipart" with: 
-
-pip install python-multipart
-
-2026-01-17 02:09:53,421 | ERROR | Form data requires "python-multipart" to be installed. 
-You can install "python-multipart" with: 
-
-pip install python-multipart
-
-2026-01-17 02:12:42,529 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato
-  mobile
-tnleopoldodevgmailcom
-wwwlinkedincomintiago
-noronhaleopoldo  linkedin
-principais competências
-desenvolv
-2026-01-17 02:12:44,561 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
-2026-01-17 03:39:29,796 | INFO | INPUT: Preciso saber o status do pedido 123 | PREPROCESSED: preciso saber status pedido
-2026-01-17 03:39:29,796 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Recebemos sua mensagem e já estamos cuidando dela para garantir uma solução rápida.'}
-2026-01-17 03:39:47,550 | INFO | INPUT: Feliz Natal para toda a equipe | PREPROCESSED: feliz natal toda equipe
-2026-01-17 03:39:47,551 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Agradecemos sua mensagem! Não é necessário nenhuma ação neste momento.'}
-2026-01-17 03:41:27,048 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
-2026-01-17 03:55:23,720 | INFO | INPUT: Feliz Natal para toda a equipe | PREPROCESSED: feliz natal toda equipe
-2026-01-17 03:55:25,813 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Muito obrigado! Desejamos um Natal maravilhoso para você também!'}
-2026-01-17 03:55:47,869 | INFO | INPUT: Preciso saber o status do pedido 123 | PREPROCESSED: preciso saber status pedido
-2026-01-17 03:55:49,727 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Já estamos verificando o status do pedido 123 e em breve retornamos com uma atualização para você. Obrigado pela paciência!'}
-2026-01-17 03:56:23,939 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
-2026-01-17 03:56:25,886 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nObrigado por compartilhar seu currículo detalhado. Estamos analisando suas competências e experiências para verificar as melhores oportunidades que se encaixem no seu perfil. Em breve retornaremos com um posicionamento.\n\nAbraços!'}
-2026-01-17 04:12:06,664 | INFO | INPUT: Feliz Natal para toda a equipe | PREPROCESSED: feliz natal toda equipe
-2026-01-17 04:12:08,297 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Olá!\n\nAgradecemos muito a sua mensagem e desejamos um Feliz Natal repleto de paz e alegrias para você também!\n\nEstamos à disposição para qualquer necessidade financeira.\n\nAtenciosamente,  \n[Nome da Empresa]'}
-2026-01-17 04:12:27,998 | INFO | INPUT: Preciso saber o status do pedido 123 | PREPROCESSED: preciso saber status pedido
-2026-01-17 04:12:29,881 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá,\n\nObrigado pelo seu contato. Estamos verificando o status do pedido 123 e em breve retornaremos com as informações atualizadas.\n\nFique à vontade para nos procurar caso tenha outras dúvidas.\n\nAtenciosamente,  \n[Seu Nome]  \n[Nome da Empresa]'}
-2026-01-17 04:13:19,073 | INFO | INPUT: pq o seu é azul | PREPROCESSED: pq azul
-2026-01-17 04:13:21,680 | INFO | OUTPUT: {'category': 'Irrelevante', 'reply': 'Olá,\n\nAgradecemos seu contato! No entanto, sua mensagem não está relacionada aos nossos serviços financeiros. Caso tenha alguma dúvida ou solicitação sobre finanças, estamos à disposição para ajudar.\n\nAtenciosamente,  \n[Nome da Empresa]'}
-2026-01-17 04:14:02,030 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
-2026-01-17 04:14:04,218 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nAgradecemos por compartilhar seu currículo detalhado conosco. Estamos cuidando da sua solicitação e, caso surja alguma oportunidade que esteja alinhada com seu perfil e competências, entraremos em contato.\n\nFicamos à disposição para qualquer dúvida.\n\nAtenciosamente,  \n[Nome da empresa]'}
-2026-01-17 04:14:34,999 | INFO | INPUT_PDF: 5384 chars | PREPROCESSED: facilitar vida financeira milhões pessoas negócios pagbank precisa pessoas protagonistas pessoas assumem responsabilidad
-2026-01-17 04:14:37,235 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá,\n\nAgradecemos pelo seu contato e por compartilhar essa reflexão tão inspiradora sobre autoconhecimento e protagonismo no ambiente profissional. Estamos cuidando da sua mensagem e valorizamos muito essa visão alinhada ao desenvolvimento pessoal e à responsabilidade, que também impulsionam o crescimento e a transformação no setor financeiro.\n\nSe precisar de qualquer suporte ou desejar saber mais sobre como o PagBank pode contribuir para facilitar sua vida financeira, estamos à disposição para ajudar.\n\nAtenciosamente,  \n[Seu Nome]  \nEquipe PagBank'}
-2026-01-17 04:20:40,376 | INFO | INPUT: Se eu juntar 1000 reais por mês. Quanto tempo demora pra eu ter um milhão. Colocando o dinheiro na caxinha a nubank pra render. | PREPROCESSED: juntar reais mês quanto tempo demora pra ter milhão colocando dinheiro caxinha nubank pra render
-2026-01-17 04:20:43,553 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá!\n\nObrigado pelo seu contato. Estamos cuidando da sua solicitação e em breve retornaremos com uma simulação detalhada sobre o tempo necessário para atingir um milhão de reais juntando R$1000 por mês, considerando o rendimento da caxinha do Nubank.\n\nFique tranquilo, logo você terá todas as informações para planejar seus investimentos da melhor forma.\n\nAtenciosamente,  \n[Seu Nome]  \n[Nome da Empresa]'}
-2026-01-17 04:25:12,929 | INFO | INPUT: Se eu juntar 1000 reais por mês. Quanto tempo demora pra eu ter um milhão. Colocando o dinheiro na caxinha a nubank pra render. | PREPROCESSED: juntar reais mês quanto tempo demora pra ter milhão colocando dinheiro caxinha nubank pra render
-2026-01-17 04:25:15,529 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pela sua pergunta. Vamos cuidar desse cálculo para você entender melhor o tempo necessário para atingir seu objetivo de um milhão juntando R$1000 por mês. Em breve, entraremos em contato com uma simulação detalhada para ajudar no seu planejamento financeiro. Estamos à disposição!'}
-2026-01-17 04:25:43,152 | INFO | INPUT: quer transar? | PREPROCESSED: quer transar
-2026-01-17 04:25:46,110 | INFO | OUTPUT: {'category': 'Improdutivo', 'reply': 'Agradecemos seu contato. Estamos à disposição para ajudar com assuntos relacionados aos nossos serviços financeiros. Caso tenha alguma dúvida ou necessidade nessa área, por favor, nos informe.'}
-2026-01-17 04:25:53,339 | INFO | INPUT: quer transar? | PREPROCESSED: quer transar
-2026-01-17 04:26:17,635 | INFO | INPUT: como faço pra voar? | PREPROCESSED: faço pra voar
-2026-01-17 04:26:48,107 | INFO | INPUT: Oi preciso de um orçamento | PREPROCESSED: oi preciso orçamento
-2026-01-17 04:26:55,043 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pelo contato. Estamos verificando sua solicitação de orçamento e em breve retornaremos com as informações detalhadas. Qualquer dúvida, estamos à disposição!'}
-2026-01-17 04:27:13,462 | INFO | INPUT: Oi preciso de um orçamento de serviço. | PREPROCESSED: oi preciso orçamento serviço
-2026-01-17 04:27:40,751 | INFO | INPUT: Quero informação | PREPROCESSED: quero informação
-2026-01-17 04:31:59,134 | INFO | INPUT: Quero informação | PREPROCESSED: quero informação
-2026-01-17 04:32:01,858 | INFO | OUTPUT: {'category': 'Irrelevante', 'reply': 'Olá! Obrigado pelo seu contato. Poderia, por favor, especificar melhor qual informação você deseja? Estamos aqui para ajudar com assuntos relacionados aos nossos serviços financeiros.'}
-2026-01-17 04:32:19,104 | INFO | INPUT: como faço pra voar? | PREPROCESSED: faço pra voar
-2026-01-17 04:32:21,968 | INFO | OUTPUT: {'category': 'Irrelevante', 'reply': 'Olá! Agradecemos seu contato, mas essa questão não está relacionada aos nossos serviços financeiros. Estamos à disposição para ajudar com qualquer dúvida ou necessidade dentro da nossa área. Conte conosco!'}
+2026-01-17 15:04:11,363 | INFO | INPUT: Preciso saber o status do meu contrato | PREPROCESSED: preciso saber status contrato
+2026-01-17 15:04:13,965 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Estamos verificando o status do seu contrato e logo entraremos em contato com as informações. Obrigado pela sua paciência!'}
+2026-01-17 15:05:20,557 | INFO | INPUT: Preciso saber o status do meu contrato | PREPROCESSED: preciso saber status contrato
+2026-01-17 15:05:22,407 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Estamos verificando o status do seu contrato e em breve retornaremos com uma atualização. Obrigado pela sua paciência!'}
+2026-01-17 15:06:00,603 | INFO | INPUT: Preciso saber o status do meu contrato | PREPROCESSED: preciso saber status contrato
+2026-01-17 15:06:01,976 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Estamos verificando o status do seu contrato e em breve retornaremos com as informações. Obrigado pela sua paciência.'}
+2026-01-17 15:07:30,982 | INFO | INPUT_PDF: 4274 chars | PREPROCESSED: contato mobile tnleopoldo dev gmail www linkedin in tiago noronha leopoldo linkedin principais competências desenvolvime
+2026-01-17 15:07:33,243 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nAgradecemos por compartilhar seu perfil detalhado. Estamos analisando suas informações com atenção e em breve entraremos em contato para dar continuidade à sua solicitação.\n\nConte conosco!\n\nAtenciosamente,  \n[Nome da Empresa]'}
+2026-01-17 15:56:19,480 | INFO | INPUT_PDF: 1669 chars | PREPROCESSED: contra to prestação serviços freelancer event contratante cura gastronomia ltda rua ourânia vila madalena cep contratado
+2026-01-17 15:56:20,851 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá,\n\nRecebemos seu contrato de prestação de serviços e estamos cuidando da sua solicitação com atenção. Caso precise de algo mais, estamos à disposição para ajudar.\n\nObrigado pelo contato!'}
+2026-01-17 16:00:36,335 | INFO | INPUT_PDF: 1669 chars | PREPROCESSED: contra to prestação serviços freelancer event contratante cura gastronomia ltda rua ourânia vila madalena cep contratado
+2026-01-17 16:00:37,854 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá,\n\nRecebemos o contrato de prestação de serviços freelancer para o evento e já estamos cuidando da sua solicitação. Caso precise de algo mais, estamos à disposição para ajudar.\n\nObrigado pelo contato!'}
+2026-01-17 16:00:57,913 | INFO | INPUT_PDF: 5384 chars | PREPROCESSED: facilitar vida financeira milhões pessoas negócios pagbank precisa pessoas protagonistas pessoas assumem responsabilidad
+2026-01-17 16:00:59,633 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Agradecemos por compartilhar essa reflexão tão inspiradora sobre autoconhecimento e protagonismo. Estamos à disposição para apoiar você na sua jornada financeira e ajudar a transformar seu potencial em resultados concretos. Conte conosco!'}
+2026-01-18 05:19:58,889 | INFO | INPUT: Preciso saber o status do pedido | PREPROCESSED: preciso saber status pedido
+2026-01-18 05:20:01,119 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Estamos verificando o status do seu pedido e logo retornaremos com uma atualização. Obrigado pela paciência!'}
+2026-01-18 05:21:56,158 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:22:00,299 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá, Tiago.\n\nRecebemos seu histórico escolar e estamos cuidando da análise completa dos seus dados. Em breve, retornaremos com as próximas orientações.\n\nObrigado pela confiança!'}
+2026-01-18 05:24:50,671 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:24:59,097 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nRecebemos seu histórico escolar e estamos acompanhando seu desempenho com atenção. Parabéns pelos resultados até aqui! Caso precise de qualquer suporte, estamos à disposição.\n\nAbraços,\n[Seu Nome]  \nEquipe de Atendimento'}
+2026-01-18 05:26:31,796 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:26:34,292 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá, Tiago!\n\nRecebemos seu histórico escolar e estamos acompanhando seu progresso com atenção. Conte conosco para o que precisar.\n\nAbraços,  \n[Seu nome]  \n[Nome da empresa]'}
+2026-01-18 05:28:29,893 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:28:31,805 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nRecebemos seu histórico escolar e estamos cuidando da análise dos seus dados. Qualquer novidade, entraremos em contato.\n\nObrigado pela confiança!'}
+2026-01-18 05:29:40,893 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:29:43,453 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nRecebemos seu histórico escolar e estamos acompanhando cuidadosamente seu progresso. Qualquer necessidade, estamos à disposição para ajudar.\n\nAbraços,  \n[Seu Nome]  \n[Empresa de Finanças]'}
+2026-01-18 05:31:39,056 | INFO | INPUT_PDF: 2519 chars | PREPROCESSED: atividades complementares estágio supervisionado curso certificação antonio carlos fonseca sarquis mestre ensino médio m
+2026-01-18 05:31:41,171 | INFO | OUTPUT_PDF: {'category': 'Produtivo', 'reply': 'Olá Tiago,\n\nRecebemos e estamos acompanhando seu histórico escolar com atenção. Caso precise de qualquer suporte ou esclarecimento, estamos à disposição para ajudar.\n\nAbraços,  \n[Seu Nome]  \n[Nome da Empresa]'}
+2026-01-18 05:33:08,997 | INFO | INPUT: Segue em anexo meu histórico escolar | PREPROCESSED: segue anexo histórico escolar
+2026-01-18 05:33:11,926 | INFO | OUTPUT: {'category': 'Irrelevante', 'reply': 'Olá,\n\nAgradecemos o envio, mas nosso atendimento não contempla análise de históricos escolares. Estamos à disposição para ajudar com assuntos financeiros.\n\nAtenciosamente,  \n[Seu Nome]'}
+2026-01-18 05:33:42,094 | INFO | INPUT: oi preciso de um orçamento de serviço financeiro | PREPROCESSED: oi preciso orçamento serviço financeiro
+2026-01-18 05:33:45,446 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pelo contato. Estamos verificando as opções para o seu orçamento de serviço financeiro e logo responderemos com as melhores soluções. Qualquer dúvida, estamos à disposição!'}
+2026-01-18 05:42:06,587 | INFO | INPUT: oi preciso de um orçamento de serviço financeiro | PREPROCESSED: oi preciso orçamento serviço financeiro
+2026-01-18 05:42:09,708 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pelo contato. Estamos cuidando do seu pedido de orçamento e em breve entraremos em contato com todas as informações necessárias. Qualquer dúvida, estamos à disposição!'}

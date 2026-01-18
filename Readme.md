@@ -1,33 +1,33 @@
 # Email Classifier AI
 
 ## Índice
-- [Visão Geral](#visão-geral)  
-- [Estrutura do Projeto](#estrutura-do-projeto)  
-- [Backend](#backend)  
-  - [Dependências](#dependências)  
-  - [Configuração da API Externa](#configuração-da-api-externa)  
-  - [Execução](#execução)  
-  - [Endpoints](#endpoints)  
-  - [Logs](#logs)  
-- [Frontend](#frontend)  
-  - [Estrutura](#estrutura)  
-  - [Execução](#execução-1)  
-  - [Fluxo de Uso](#fluxo-de-uso)  
-  - [Estados de Carregamento e Erros](#estados-de-carregamento-e-erros)  
-- [Integração Frontend ↔ Backend](#integração-frontend--backend)  
-- [Testes Manuais](#testes-manuais)  
-- [Testar Online (Deploy)](#testar-online-deploy)  
-- [Limitações Conhecidas](#limitações-conhecidas)  
-- [Melhorias Futuras](#melhorias-futuras)  
+- [Visão Geral](#visão-geral)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Frontend](#frontend)
+  - [Dependências](#dependências)
+  - [Execução](#execução)
+  - [Fluxo de Uso](#fluxo-de-uso)
+- [Backend](#backend)
+  - [Dependências](#dependências-1)
+  - [Configuração da API Externa](#configuração-da-api-externa)
+  - [Execução](#execução-1)
+  - [Endpoints](#endpoints)
+- [Integração Frontend ↔ Backend](#integração-frontend--backend)
+- [Testes Manuais](#testes-manuais)
+- [Deploy Online](#deploy-online)
+- [Limitações Conhecidas](#limitações-conhecidas)
+- [Melhorias Futuras](#melhorias-futuras)
 
 ---
 
 ## Visão Geral
-O projeto **Email Classifier AI** tem como objetivo classificar textos de emails em duas categorias principais — **Produtivo** e **Improdutivo** — e sugerir respostas automáticas adequadas.  
-A solução é composta por dois módulos:
+O projeto **Email Classifier AI** foi desenvolvido como solução para uma empresa do setor financeiro que lida com alto volume de emails diariamente.  
+Objetivo: **automatizar a leitura e classificação de emails** em categorias predefinidas e sugerir respostas automáticas, liberando tempo da equipe.
 
-- **Backend**: API em Python/FastAPI que consome a **OpenAI API** para classificação e geração de respostas.  
-- **Frontend**: Interface em HTML/CSS/JavaScript para interação com o usuário.  
+**Categorias de Classificação:**
+- **Produtivo:** requer ação ou resposta específica.  
+- **Improdutivo:** não requer ação imediata.  
+- **Irrelevante:** não relacionado ao escopo da empresa.  
 
 ---
 
@@ -36,160 +36,128 @@ A solução é composta por dois módulos:
 ```
 email-ai/
 │
-├── backend/
-│   ├── logs/
-│   │   └── classify.log
+├── backend/                  # API em Python/FastAPI
 │   ├── app.py
+│   ├── core/                 # Configuração, logging, NLP
+│   ├── services/             # Regras, OpenAI, PDF
+│   ├── routes/               # Endpoints
+│   ├── models/               # Schemas Pydantic
+│   ├── logs/                 # classify.log
 │   ├── requirements.txt
-│   └── README.md
+│   └── README.md             # Documentação backend
 │
-├── frontend/
+├── frontend/                 # Interface web
 │   ├── index.html
 │   ├── styles.css
 │   ├── script.js
-│   └── README.md
+│   └── README.md             # Documentação frontend
 │
-└── README.md   # Este documento
+├── .gitignore
+└── README.md                 # Este documento
 ```
+
+---
+
+## Frontend
+
+### Dependências
+Não há dependências externas.  
+Para servir localmente:
+```bash
+cd frontend
+python -m http.server 3000
+```
+
+### Execução
+1. Inicie o backend em `http://localhost:8000`.  
+2. Sirva o frontend em `http://localhost:3000`.  
+3. Abra no navegador: `http://localhost:3000`.
+
+### Fluxo de Uso
+1. Usuário digita texto ou faz upload de `.txt` ou `.pdf`.  
+2. Clica em **Classificar e sugerir resposta**.  
+3. Frontend envia requisição ao backend.  
+4. Backend retorna categoria e resposta.  
+5. Resultado exibido na tela.  
+6. Campos de entrada são limpos após envio.
 
 ---
 
 ## Backend
 
 ### Dependências
-Instale as dependências listadas em `backend/requirements.txt`:
-
+Instale via `requirements.txt`:
 ```bash
 pip install -r backend/requirements.txt
 ```
 
-Conteúdo atualizado do `requirements.txt`:
-```txt
-fastapi
-uvicorn[standard]
-pydantic
-requests
-nltk
-python-dotenv
-PyPDF2
-python-multipart
+### Configuração da API Externa
+Crie `.env` em `backend`:
+```
+OPENAI_API_KEY=sua_chave_openai_aqui
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
-### Configuração da API Externa
-Este backend consome a **OpenAI API**.  
-É necessário definir a variável de ambiente `OPENAI_API_KEY` com sua chave de acesso.  
-
-No Render ou em execução local:
-1. Crie um arquivo `.env` dentro da pasta `backend`.  
-2. Adicione as variáveis:  
-   ```
-   OPENAI_API_KEY=sua_chave_openai_aqui
-   OPENAI_MODEL=gpt-4.1-mini
-   ```
-
 ### Execução
-
-**Opção 1: Executar da raiz do projeto**
 ```bash
 uvicorn backend.app:app --reload
 ```
 
-**Opção 2: Executar de dentro da pasta backend**
-```bash
-cd backend
-python -m uvicorn app:app --reload
-```
-
-O servidor estará disponível em:
+Servidor disponível em:
 ```
 http://127.0.0.1:8000
 ```
 
 ### Endpoints
-
-| Endpoint        | Método | Descrição                                   | Request Body                         | Response Body (JSON)                       | Status Codes     |
-|-----------------|--------|---------------------------------------------|--------------------------------------|--------------------------------------------|------------------|
-| `/health`       | GET    | Verifica se o serviço está ativo            | —                                    | `{ "status": "ok" }`                       | 200              |
-| `/classify`     | POST   | Classifica texto enviado em JSON            | `{ "text": "Preciso saber o status" }` | Campos: `category`, `reply`                | 200, 400, 500    |
-| `/classify-pdf` | POST   | Classifica texto extraído de arquivo PDF    | `multipart/form-data` com campo `file` | Campos: `category`, `reply`                | 200, 400, 500    |
-
----
-
-## Frontend
-
-### Estrutura
-- **index.html**: página principal com formulário de entrada e área de resultados.  
-- **styles.css**: estilos da interface.  
-- **script.js**: lógica de envio de requisições ao backend e exibição dos resultados.  
-
-### Execução
-Para evitar problemas de CORS, recomenda-se servir o frontend via servidor local:
-
-```bash
-cd frontend
-python -m http.server 3000
-```
-
-Acesse no navegador:
-```
-http://localhost:3000
-```
-
-### Fluxo de Uso
-1. Digite o texto do email no campo de texto ou faça upload de um arquivo `.txt` ou `.pdf`.  
-2. Clique em **Classificar e sugerir resposta**.  
-3. O frontend envia requisição `POST`:  
-   - Texto ou `.txt` → `/classify`  
-   - `.pdf` → `/classify-pdf`  
-4. O backend retorna a classificação e resposta sugerida.  
-5. O resultado é exibido na seção **Resultado**.  
+- **GET /health** → Verifica se o serviço está ativo.  
+- **POST /classify** → Classifica texto enviado em JSON.  
+- **POST /classify-pdf** → Classifica texto extraído de arquivo PDF.  
 
 ---
 
 ## Integração Frontend ↔ Backend
-
-### Pré-requisitos
-- Backend rodando em `http://localhost:8000`.  
-- Frontend servido em `http://localhost:3000`.  
-- Navegador moderno.  
-
-### Passo a passo
-1. Inicie o backend:
-   ```bash
-   python -m uvicorn app:app --reload
-   ```
-2. Sirva o frontend:
-   ```bash
-   cd frontend
-   python -m http.server 3000
-   ```
-3. Acesse `http://localhost:3000`.  
-4. Digite ou envie um arquivo de email.  
-5. Clique em **Classificar e sugerir resposta**.  
-6. Veja a categoria e resposta sugerida exibidas na tela.  
+- Frontend consome endpoints do backend via `fetch`.  
+- Em produção:  
+  - **Frontend (Vercel):** `https://email-ai-js-py.vercel.app`  
+  - **Backend (Render):** `https://email-ai-js-py.onrender.com`
 
 ---
 
-## Testes Manuais
-
-### Casos de entrada
-- **Produtivo:** "Preciso saber o prazo do projeto 123"  
-- **Produtivo:** "Quero acompanhar o status do pedido 789"  
-- **Improdutivo:** "Feliz Natal para toda a equipe"  
-- **Improdutivo:** "Mensagem de agradecimento sem solicitação"  
-
-### Resultado esperado
-- Categoria exibida corretamente.  
-- Resposta sugerida coerente com a intenção.  
-- Registro em `classify.log`.  
-- Botão desabilitado e mensagem “Processando…” durante requisição.  
-- Mensagens de erro exibidas no card em caso de falha.  
-- Upload de `.pdf` funcionando corretamente.  
+Perfeito, Tiago 👌. Esse trecho do README realmente ficou parecendo que o sistema só reconhece frases fixas, quando na verdade ele está **integrado a uma IA (OpenAI)** e pode lidar com qualquer texto enviado pelo usuário. Vou reformular a seção **Testes Manuais** do README geral (e isso vale também para o backend/frontend) para deixar claro que não é um sistema de regras fixas, mas sim um classificador inteligente com IA.
 
 ---
 
-## Testar Online (Deploy)
+### Testes Manuais
 
+O sistema não depende de frases pré-definidas.  
+O usuário pode enviar **qualquer mensagem de email** e o backend, integrado à **OpenAI API**, irá analisar o conteúdo e decidir a categoria mais adequada:
+
+- **Produtivo:** mensagens que exigem ação ou resposta (ex.: solicitações de status, dúvidas sobre contratos, pedidos de suporte).  
+- **Improdutivo:** mensagens que não exigem ação imediata (ex.: felicitações, agradecimentos).  
+- **Irrelevante:** mensagens fora do escopo da empresa (ex.: brincadeiras, assuntos não relacionados).  
+
+A IA gera também uma **resposta automática personalizada**, adaptada ao contexto da mensagem.  
+Isso significa que não é um simples sistema de regras booleanas:  
+mesmo que o usuário escreva frases diferentes ou complexas, o modelo de IA consegue interpretar e responder de forma natural.
+
+#### Exemplos de teste
+- "Preciso saber o status do pedido" → Categoria: Produtivo → Resposta: confirma que a solicitação está sendo cuidada.  
+- "Quero cancelar meu contrato" → Categoria: Produtivo → Resposta: informa que o cancelamento será tratado.  
+- "Feliz Natal para toda a equipe" → Categoria: Improdutivo → Resposta: agradece cordialmente.  
+- "Mensagem de agradecimento sem solicitação" → Categoria: Improdutivo → Resposta: agradece de forma simpática.  
+
+Esses exemplos são apenas ilustrativos.  
+Na prática, o sistema aceita **qualquer frase** e a IA decide a categoria e resposta de acordo com o conteúdo.
+
+Verificar:
+- Categoria correta.  
+- Resposta coerente.  
+- Campos limpos após envio.  
+- Logs registrados em `classify.log`.  
+
+---
+
+## Deploy Online
 - **Frontend (Vercel):**  
   `https://email-ai-js-py.vercel.app`  
 - **Backend (Render):**  
@@ -197,18 +165,3 @@ http://localhost:3000
 
 ---
 
-## Limitações Conhecidas
-- PDFs escaneados como imagem não são suportados (apenas PDFs com texto).  
-- Interface simples, sem design avançado.  
-- Dependência da API externa (resultados podem variar conforme modelo da OpenAI).  
-- Não há testes automatizados.  
-
----
-
-## Melhorias Futuras
-- Implementar suporte a OCR para PDFs escaneados.  
-- Adicionar testes automatizados (unitários e integração).  
-- Melhorar interface (responsividade, acessibilidade, design mais moderno).  
-- Evoluir integração com modelos mais robustos da OpenAI ou Hugging Face.  
-- Documentar e automatizar deploy em Vercel (frontend) e Render (backend).  
-- Adicionar observabilidade (logs avançados, métricas e tracing).  

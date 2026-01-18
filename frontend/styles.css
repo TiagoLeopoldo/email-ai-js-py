@@ -18,7 +18,12 @@ body {
   line-height: 1.6;
 }
 
-header { padding: 24px 16px; text-align: center; background: var(--primary); color: #fff; }
+header {
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--primary);
+  color: #fff;
+}
 h1 { margin-bottom: 8px; font-size: 2rem; }
 
 main { max-width: 900px; margin: 20px auto; padding: 0 16px; }
@@ -58,11 +63,22 @@ textarea { resize: vertical; min-height: 120px; }
 .btn:hover { background: #2563eb; }
 .btn:disabled { background: #93c5fd; cursor: not-allowed; }
 
-.divider { text-align: center; color: var(--muted); margin: 16px 0; position: relative; }
-.divider::before, .divider::after {
-  content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: #e5e7eb;
+.divider {
+  text-align: center;
+  color: var(--muted);
+  margin: 16px 0;
+  position: relative;
 }
-.divider::before { left: 0; } .divider::after { right: 0; }
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e5e7eb;
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
 
 .hidden { display: none; }
 
@@ -70,17 +86,20 @@ textarea { resize: vertical; min-height: 120px; }
 .result-label { font-weight: 500; color: var(--muted); }
 
 .badge {
-  display: inline-block; padding: 6px 12px; border-radius: 999px;
-  background: #f3f4f6; border: 1px solid #d1d5db; font-weight: 600;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  font-weight: 600;
 }
 
-/* Feedback visual para categorias */
+/* Feedback visual */
 .category-productive {
   color: var(--accent);
   border: 2px solid var(--accent);
   background-color: #dcfce7;
 }
-
 .category-unproductive {
   color: var(--danger);
   border: 2px solid var(--danger);
@@ -88,11 +107,20 @@ textarea { resize: vertical; min-height: 120px; }
 }
 
 pre {
-  background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
-  padding: 12px; white-space: pre-wrap; font-size: 0.95rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
 }
 
-footer { text-align: center; color: var(--muted); padding: 20px; font-size: 0.9rem; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 20px;
+  font-size: 0.9rem;
+}
 
 .loading {
   margin-top: 10px;
