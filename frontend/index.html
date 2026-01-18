@@ -17,19 +17,23 @@
     <section class="card">
       <h2>Processar email</h2>
       <form id="email-form">
+        <!-- Campo de texto -->
         <label class="label" for="email-text">Cole o texto do email</label>
         <textarea id="email-text" placeholder="Cole aqui o conteúdo do email..." rows="10"></textarea>
 
         <div class="divider">ou</div>
 
+        <!-- Upload de arquivo -->
         <label class="label" for="email-file">Faça upload (.txt ou .pdf)</label>
         <input id="email-file" type="file" accept=".txt,.pdf" />
 
+        <!-- Botão -->
         <button type="submit" class="btn" id="submit-btn">Classificar e sugerir resposta</button>
         <div id="loading" class="loading hidden" aria-live="polite">Processando…</div>
       </form>
     </section>
 
+    <!-- Resultados -->
     <section id="results" class="card hidden">
       <h2>Resultado</h2>
       <div class="result-row">

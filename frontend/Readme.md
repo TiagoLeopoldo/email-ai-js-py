@@ -1,17 +1,27 @@
 # Frontend – Email Classifier AI
 
-## Visão Geral
-Este frontend foi desenvolvido utilizando **HTML**, **CSS** e **JavaScript puro**, sem frameworks ou bibliotecas externas.  
-O objetivo é permitir que o usuário insira ou envie o conteúdo de um email, envie esse conteúdo ao backend via requisição HTTP e visualize a classificação e resposta sugerida.  
+## Índice
+- [Visão Geral](#visão-geral)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Dependências](#dependências)
+- [Execução](#execução)
+- [Fluxo de Uso](#fluxo-de-uso)
+- [Integração com Backend](#integração-com-backend)
+- [Estados de Carregamento e Erros](#estados-de-carregamento-e-erros)
+- [Testes Manuais](#testes-manuais)
+- [Limitações Conhecidas](#limitações-conhecidas)
+- [Melhorias Futuras](#melhorias-futuras)
 
-Atualmente o frontend possui:
-- **Estado de carregamento** (botão desabilitado + mensagem “Processando…”).  
-- **Tratamento de erros padronizado**, exibindo mensagens diretamente na interface.  
-- **Validação de limite de texto** (máximo de 2000 caracteres).  
-- **Feedback visual aprimorado**: cores diferenciadas para categorias (verde para produtivo, vermelho para improdutivo), contraste melhorado e responsividade básica.  
-- **Suporte a upload de arquivos `.txt` e `.pdf`**:  
-  - `.txt` → conteúdo lido no frontend e enviado para `/classify`.  
-  - `.pdf` → arquivo enviado via `multipart/form-data` para `/classify-pdf`.  
+---
+
+## Visão Geral
+O frontend é uma **interface web simples e intuitiva** desenvolvida em **HTML, CSS e JavaScript**.  
+Ele permite que o usuário insira texto de emails ou faça upload de arquivos `.txt` ou `.pdf`, envia os dados para o backend e exibe:
+
+- A **categoria** atribuída ao email (**Produtivo**, **Improdutivo** ou **Irrelevante**).  
+- A **resposta automática sugerida** pelo sistema.  
+
+O sistema está integrado à **OpenAI API**, o que significa que não depende de frases fixas: qualquer mensagem enviada é analisada pela IA, que interpreta o conteúdo e gera uma resposta natural e contextualizada.
 
 ---
 
@@ -19,126 +29,77 @@ Atualmente o frontend possui:
 
 ```
 frontend/
-│
-├── index.html           # Página principal da aplicação
-├── styles.css           # Estilos visuais da interface
-└── script.js            # Lógica de interação e comunicação com o backend
+├── index.html      # Página principal
+├── styles.css      # Estilos da interface
+├── script.js       # Lógica de interação e integração com backend
+└── README.md       # Este documento
 ```
-
-### Descrição dos Arquivos
-
-- **index.html**  
-  Estrutura da interface: cabeçalho, formulário com campo de texto e upload de arquivo, botão de envio e área de exibição de resultados.  
-  Inclui elementos para exibir **estado de carregamento**, **mensagens de erro**, validação de limite de texto e feedback visual.
-
-- **styles.css**  
-  Estilização básica: layout centralizado, botões, campos de entrada e área de resultados.  
-  Inclui estilos para o botão desabilitado, para a mensagem de carregamento, para mensagens de erro em destaque vermelho e para categorias com cores diferenciadas (verde/vermelho).  
-  Responsividade básica para telas menores.
-
-- **script.js**  
-  Captura o envio do formulário, trata entrada de texto ou arquivo `.txt`/`.pdf`, envia requisição `POST` para o backend (`/classify` ou `/classify-pdf`) e exibe os dados retornados (`category`, `reply`).  
-  Controla o estado de carregamento, exibe erros diretamente no card de resultados, valida o limite máximo de caracteres e aplica classes visuais para diferenciar categorias.
 
 ---
 
-## Requisitos e Execução
+## Dependências
+O frontend não depende de frameworks externos.  
+Para servir localmente, pode-se usar o servidor embutido do Python:
 
-### Pré-requisitos
-- Backend deve estar rodando em `http://localhost:8000` ou estar disponível em produção (ex.: Render).  
-- Navegador moderno com suporte a `fetch` e `FileReader`.
+```bash
+cd frontend
+python -m http.server 3000
+```
 
-### Como Executar
-1. Inicie o backend com:
-   ```bash
-   python -m uvicorn app:app --reload
-   ```
-2. Sirva o frontend via servidor local para evitar problemas de CORS:
-   ```bash
-   cd frontend
-   python -m http.server 3000
-   ```
-3. Acesse no navegador:
-   ```
-   http://localhost:3000
-   ```
-4. Digite um texto ou envie um arquivo `.txt` ou `.pdf`.  
-5. Clique em “Classificar e sugerir resposta”.  
-6. O resultado será exibido na seção “Resultado”.  
-7. Durante o processamento, o botão ficará desabilitado e aparecerá a mensagem **“Processando…”**.  
-8. Se ocorrer erro, a mensagem será exibida no card de resultados.  
-9. Se o texto ultrapassar **2000 caracteres**, o envio será bloqueado e aparecerá a mensagem:  
-   **“O texto excede o limite de 2000 caracteres. Reduza o conteúdo e tente novamente.”**  
-10. A categoria será exibida com cores diferenciadas:  
-    - Verde para **Produtivo**.  
-    - Vermelho para **Improdutivo**.  
+---
+
+## Execução
+1. Certifique-se de que o **backend** está rodando em `http://localhost:8000`.  
+2. Sirva o frontend em `http://localhost:3000`.  
+3. Abra o navegador e acesse `http://localhost:3000`.  
 
 ---
 
 ## Fluxo de Uso
-
-1. **Entrada de texto**  
-   - Usuário digita diretamente no campo `textarea`.  
-   - O texto é enviado ao backend via `fetch` para `/classify`.  
-   - Se ultrapassar 2000 caracteres, o envio é bloqueado.
-
-2. **Upload de arquivo**  
-   - `.txt`: conteúdo lido no frontend e enviado como texto para `/classify`.  
-   - `.pdf`: arquivo enviado via `multipart/form-data` para `/classify-pdf`.  
-   - Se o conteúdo do `.txt` ultrapassar 2000 caracteres, o envio é bloqueado.
-
-3. **Resposta exibida**  
-   - Categoria (badge colorida: verde ou vermelho).  
-   - Resposta sugerida (texto formatado).  
-   - Em caso de erro, mensagem exibida no card de resultados em vermelho.
-
-4. **Estado de carregamento**  
-   - Botão desabilitado durante requisição.  
-   - Mensagem “Processando…” exibida abaixo do botão.
+1. Digite o texto do email no campo de texto ou faça upload de um arquivo `.txt` ou `.pdf`.  
+2. Clique em **Classificar e sugerir resposta**.  
+3. O frontend envia requisição `POST` para o backend:  
+   - Texto ou `.txt` → `/classify`  
+   - `.pdf` → `/classify-pdf`  
+4. O backend retorna a classificação e resposta sugerida.  
+5. O resultado é exibido na seção **Resultado**.  
+6. Após envio, os campos de texto e upload são **limpos automaticamente**.  
 
 ---
 
-## Validações e Tratamento de Erros
+## Integração com Backend
+- O frontend consome os endpoints do backend hospedado em Render:  
+  - `https://email-ai-js-py.onrender.com/classify`  
+  - `https://email-ai-js-py.onrender.com/classify-pdf`  
+- Em ambiente local, basta alterar a constante `API_BASE` no `script.js` para `http://localhost:8000`.
 
-- Nenhum texto ou arquivo → **“Nenhum texto ou arquivo válido foi fornecido.”**  
-- Formato inválido → **“Formato de arquivo não suportado. Use apenas .txt ou .pdf.”**  
-- Texto acima de 2000 caracteres → **“O texto excede o limite de 2000 caracteres. Reduza o conteúdo e tente novamente.”**  
-- Erro interno → **“Erro interno ao processar sua solicitação. Tente novamente mais tarde.”**  
-- Falha de conexão → **“Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.”**  
-- Todas as mensagens de erro são exibidas diretamente no card de resultados, em vermelho.  
-- Estado de carregamento garante que o usuário saiba que a requisição está em andamento.  
-- Feedback visual reforça a categoria com cores diferenciadas.  
+---
+
+## Estados de Carregamento e Erros
+- Durante o processamento, o botão é desabilitado e aparece a mensagem **“Processando…”**.  
+- Em caso de erro (texto inválido, arquivo não suportado, falha de conexão), o frontend exibe mensagem clara na seção de resultados.  
+- Campos são limpos após envio bem-sucedido.  
 
 ---
 
 ## Testes Manuais
+O sistema não depende de frases pré-definidas.  
+O usuário pode enviar **qualquer mensagem de email** e o backend, integrado à **OpenAI API**, irá analisar o conteúdo e decidir a categoria mais adequada:
 
-### Casos de Entrada
-- Texto direto: “Preciso saber o status da minha solicitação de suporte.”  
-- Upload `.txt`: arquivo com conteúdo “Quero cancelar meu contrato.”  
-- Upload `.pdf`: arquivo PDF com qualquer conteúdo textual.  
-- Texto longo (>2000 caracteres): string repetida para simular excesso.  
+- **Produtivo:** mensagens que exigem ação ou resposta (ex.: solicitações de status, dúvidas sobre contratos, pedidos de suporte).  
+- **Improdutivo:** mensagens que não exigem ação imediata (ex.: felicitações, agradecimentos).  
+- **Irrelevante:** mensagens fora do escopo da empresa (ex.: brincadeiras, assuntos não relacionados).  
 
-### Resultado Esperado
-- Categoria exibida corretamente (**Produtivo** ou **Improdutivo**) com cores diferenciadas.  
-- Resposta sugerida coerente com a intenção.  
-- Layout funcional e responsivo.  
-- Botão desabilitado e mensagem “Processando…” durante requisição.  
-- Mensagens de erro exibidas no card em caso de falha.  
-- Texto acima de 2000 caracteres bloqueado com mensagem clara.  
-- Upload de `.pdf` funcionando corretamente com resposta do backend.  
+A IA gera também uma **resposta automática personalizada**, adaptada ao contexto da mensagem.  
+Isso significa que não é um simples sistema de regras booleanas: mesmo que o usuário escreva frases diferentes ou complexas, o modelo de IA consegue interpretar e responder de forma natural.
 
----
+#### Exemplos de teste
+- "Preciso saber o status do pedido" → Categoria: Produtivo → Resposta: confirma que a solicitação está sendo cuidada.  
+- "Quero cancelar meu contrato" → Categoria: Produtivo → Resposta: informa que o cancelamento será tratado.  
+- "Feliz Natal para toda a equipe" → Categoria: Improdutivo → Resposta: agradece cordialmente.  
+- "Mensagem de agradecimento sem solicitação" → Categoria: Improdutivo → Resposta: agradece de forma simpática.  
 
-## Limitações Conhecidas
-- Extração de texto de arquivos `.pdf` não é realizada no frontend (apenas no backend).  
-- Interface simples, sem responsividade avançada ou acessibilidade estendida.  
-- Não há testes automatizados ou cobertura de casos extremos.  
+👉 Esses exemplos são apenas ilustrativos.  
+Na prática, o sistema aceita **qualquer frase** e a IA decide a categoria e resposta de acordo com o conteúdo.
 
 ---
-
-## Melhorias Futuras
-- Implementar leitura de `.pdf` via biblioteca JS (ex.: PDF.js) para pré-visualização.  
-- Adicionar validações de conteúdo e feedback visual mais detalhado.  
-- Melhorar responsividade e acessibilidade.  
-- Implementar testes automatizados (unitários e integração).  
