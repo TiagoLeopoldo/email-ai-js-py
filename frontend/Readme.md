@@ -99,7 +99,7 @@ Isso significa que não é um simples sistema de regras booleanas: mesmo que o u
 - "Feliz Natal para toda a equipe" → Categoria: Improdutivo → Resposta: agradece cordialmente.  
 - "Mensagem de agradecimento sem solicitação" → Categoria: Improdutivo → Resposta: agradece de forma simpática.  
 
-👉 Esses exemplos são apenas ilustrativos.  
+Esses exemplos são apenas ilustrativos.  
 Na prática, o sistema aceita **qualquer frase** e a IA decide a categoria e resposta de acordo com o conteúdo.
 
 ---

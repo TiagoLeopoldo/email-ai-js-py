@@ -30,3 +30,5 @@
 2026-01-18 05:33:11,926 | INFO | OUTPUT: {'category': 'Irrelevante', 'reply': 'Olá,\n\nAgradecemos o envio, mas nosso atendimento não contempla análise de históricos escolares. Estamos à disposição para ajudar com assuntos financeiros.\n\nAtenciosamente,  \n[Seu Nome]'}
 2026-01-18 05:33:42,094 | INFO | INPUT: oi preciso de um orçamento de serviço financeiro | PREPROCESSED: oi preciso orçamento serviço financeiro
 2026-01-18 05:33:45,446 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pelo contato. Estamos verificando as opções para o seu orçamento de serviço financeiro e logo responderemos com as melhores soluções. Qualquer dúvida, estamos à disposição!'}
+2026-01-18 05:42:06,587 | INFO | INPUT: oi preciso de um orçamento de serviço financeiro | PREPROCESSED: oi preciso orçamento serviço financeiro
+2026-01-18 05:42:09,708 | INFO | OUTPUT: {'category': 'Produtivo', 'reply': 'Olá! Obrigado pelo contato. Estamos cuidando do seu pedido de orçamento e em breve entraremos em contato com todas as informações necessárias. Qualquer dúvida, estamos à disposição!'}
