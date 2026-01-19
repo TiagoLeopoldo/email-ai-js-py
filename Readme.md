@@ -123,10 +123,6 @@ http://127.0.0.1:8000
 
 ---
 
-Perfeito, Tiago 👌. Esse trecho do README realmente ficou parecendo que o sistema só reconhece frases fixas, quando na verdade ele está **integrado a uma IA (OpenAI)** e pode lidar com qualquer texto enviado pelo usuário. Vou reformular a seção **Testes Manuais** do README geral (e isso vale também para o backend/frontend) para deixar claro que não é um sistema de regras fixas, mas sim um classificador inteligente com IA.
-
----
-
 ### Testes Manuais
 
 O sistema não depende de frases pré-definidas.  
